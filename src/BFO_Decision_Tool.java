@@ -5,6 +5,7 @@
  *
  */
 import Models.DecisionNode;
+import Controllers.Questions;
 
 class BFO_Decision_Tool{
 	// main function
