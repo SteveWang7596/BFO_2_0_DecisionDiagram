@@ -1,8 +1,8 @@
 // methods: processAnswer(answer) or nextQuestion(answer), previousQuestion(), getAnswerOptions()
 // enum for different answer types (YES/NO)(ONE/TWO/THREE/ZERO)(...)
-package Controllers;
+package za.ac.uct.cs.controllers;
 
-import Models.DecisionNode;
+import za.ac.uct.cs.models.DecisionNode;
 
 public class Questions{
 	/// TODO

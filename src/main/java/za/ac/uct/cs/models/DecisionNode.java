@@ -1,5 +1,5 @@
 // Tree Node BFO decision diagram
-package Models;
+package za.ac.uct.cs.models;
 
 import java.util.Vector;
 import java.util.Collection;

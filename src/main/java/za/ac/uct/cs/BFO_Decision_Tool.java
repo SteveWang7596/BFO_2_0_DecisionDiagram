@@ -4,8 +4,8 @@
  * @date July 2021
  *
  */
-import Models.DecisionNode;
-import Controllers.Questions;
+import za.ac.uct.cs.models.DecisionNode;
+import za.ac.uct.cs.controllers.Questions;
 
 class BFO_Decision_Tool{
 	// main function
