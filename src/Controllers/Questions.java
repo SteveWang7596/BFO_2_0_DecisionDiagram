@@ -17,6 +17,6 @@ public class Questions{
 	}
 
 	public String getQuestion(){
-		return currentQuestion.question;
+		return currentQuestion.getValue().question;
 	}
 }
