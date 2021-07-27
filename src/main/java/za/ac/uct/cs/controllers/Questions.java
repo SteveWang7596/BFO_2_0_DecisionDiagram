@@ -13,10 +13,11 @@ public class Questions{
 	}
 
 	public void goToPreviousQuestion(){
-		currentQuestion = currentQuestion.getParent();
+		//currentQuestion = currentQuestion.getParent();
 	}
 
 	public String getQuestion(){
-		return currentQuestion.getValue().question;
+		//return currentQuestion.getValue().question;
+                return null;
 	}
 }
