@@ -16,6 +16,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private File owl_file;
     private String owl_file_path;
+    private String current_entity_name;
     
     /**
      * Creates new form MainFrame
@@ -39,6 +40,10 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         lblOwlFile = new javax.swing.JLabel();
         txtOwlFilePath = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        lblEntityName = new javax.swing.JLabel();
+        txtEntityName = new javax.swing.JTextField();
+        btnEntityName = new javax.swing.JButton();
         MenuBar = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         ImportOWLFile = new javax.swing.JMenuItem();
@@ -55,15 +60,39 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        lblEntityName.setText("Entity Name:");
+
+        txtEntityName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEntityNameActionPerformed(evt);
+            }
+        });
+
+        btnEntityName.setText("Confirm");
+        btnEntityName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntityNameActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblOwlFile, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtOwlFilePath, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblEntityName, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtEntityName, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEntityName, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblOwlFile, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtOwlFilePath)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -73,7 +102,14 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblOwlFile)
                     .addComponent(txtOwlFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(354, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEntityName)
+                    .addComponent(txtEntityName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEntityName))
+                .addContainerGap(308, Short.MAX_VALUE))
         );
 
         FileMenu.setText("File");
@@ -130,9 +166,24 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_ImportOWLFileActionPerformed
 
     private void txtOwlFilePathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOwlFilePathActionPerformed
-        // TODO add your handling code here:
+        // Unreachable code txtOwlFilePath is uneditable
     }//GEN-LAST:event_txtOwlFilePathActionPerformed
 
+    private void txtEntityNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEntityNameActionPerformed
+        setCurrentEntityName(txtEntityName.getText());
+    }//GEN-LAST:event_txtEntityNameActionPerformed
+
+    private void btnEntityNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntityNameActionPerformed
+        setCurrentEntityName(txtEntityName.getText());
+    }//GEN-LAST:event_btnEntityNameActionPerformed
+
+    private void setCurrentEntityName(String entity_name)
+    {
+        current_entity_name = entity_name;
+        txtEntityName.setEnabled(false);
+        System.out.println("Current entity name: " + current_entity_name);
+    }
+            
     /**
      * @param args the command line arguments
      */
@@ -173,9 +224,13 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu FileMenu;
     private javax.swing.JMenuItem ImportOWLFile;
     private javax.swing.JMenuBar MenuBar;
+    private javax.swing.JButton btnEntityName;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblEntityName;
     private javax.swing.JLabel lblOwlFile;
+    private javax.swing.JTextField txtEntityName;
     private javax.swing.JTextField txtOwlFilePath;
     // End of variables declaration//GEN-END:variables
 }
