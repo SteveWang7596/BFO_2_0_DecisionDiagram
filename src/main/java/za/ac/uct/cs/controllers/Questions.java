@@ -8,16 +8,33 @@ public class Questions{
 	/// TODO
 	private DecisionNode currentQuestion;
 
+	public void begin(){
+		TreeBuilder decisionTree = new TreeBuilder();
+		decisionTree.buildTree();
+		this.currentQuestion = decisionTree.getRoot();
+	}
+
 	public void processAnswer(int answer){
 		// process answer
 	}
 
 	public void goToPreviousQuestion(){
-		//currentQuestion = currentQuestion.getParent();
+		this.currentQuestion = (DecisionNode)this.currentQuestion.getParent();
 	}
 
 	public String getQuestion(){
-		//return currentQuestion.getValue().question;
-                return null;
+		return this.currentQuestion.getValue().question;
+	}
+
+	public String[] getAnswerOptions(){
+		/// TODO: documentation
+		Enum[] choices = this.currentQuestion.getValue().getChoices();
+		String[] answerOptions = new String[choices.length];
+		int index = 0;
+		for (Enum choice : choices){
+	    	answerOptions[index] = choice.toString();
+	        ++index;
+	    }
+	    return answerOptions;
 	}
 }

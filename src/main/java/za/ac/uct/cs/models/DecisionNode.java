@@ -14,7 +14,7 @@ public class DecisionNode implements TreeNode{
 	private DecisionNode parent;
 	private boolean allowsChildren;
 	private Vector<DecisionNode> children;
-	private Object value;
+	private Decision value;
 
 	/// TODO: compare, setters (maybe?), (protected) addChildAtIndex
 	public DecisionNode(){
@@ -43,7 +43,7 @@ public class DecisionNode implements TreeNode{
 		this.value = null;
 	}
 
-	public DecisionNode(DecisionNode parent, Object value, boolean allowsChildren, Collection<DecisionNode> children){
+	public DecisionNode(DecisionNode parent, Decision value, boolean allowsChildren, Collection<DecisionNode> children){
 		this.parent = parent;
 		this.parent.addChild(this);
 
@@ -52,7 +52,7 @@ public class DecisionNode implements TreeNode{
 		this.value = value;
 	}
 
-	public DecisionNode(DecisionNode parent, Object value){
+	public DecisionNode(DecisionNode parent, Decision value){
 		this.parent = parent;
 		this.parent.addChild(this);
 
@@ -61,7 +61,7 @@ public class DecisionNode implements TreeNode{
 		this.children = new Vector<DecisionNode>(DEFAULT_CHILD_CAPACITY);
 	}
 
-	public DecisionNode(DecisionNode parent, Object value, boolean allowsChildren){
+	public DecisionNode(DecisionNode parent, Decision value, boolean allowsChildren){
 		this.parent = parent;
 		this.parent.addChild(this);
 
@@ -70,7 +70,7 @@ public class DecisionNode implements TreeNode{
 		this.children = new Vector<DecisionNode>(DEFAULT_CHILD_CAPACITY);
 	}
 
-	public Object getValue(){
+	public Decision getValue(){
 		return this.value;
 	}
 
@@ -88,24 +88,28 @@ public class DecisionNode implements TreeNode{
 	}
 
 	// interface method getChildAt
+    @Override
 	public TreeNode getChildAt(int childIndex){
 		/* Returns the child TreeNode at index childIndex. */
 		return this.children.elementAt(childIndex);
 	}
 	
 	// interface method getChildCount
+    @Override
 	public int getChildCount(){
 		/* Returns the number of children TreeNodes the receiver contains. */
 		return this.children.size();
 	}
 	
 	// interface method getParent
+    @Override
 	public TreeNode getParent(){
 		/* Returns the parent TreeNode of the receiver. */
 		return this.parent;
 	}
 	
 	// interface method getIndex
+    @Override
 	public int getIndex(TreeNode node){
 		/* Returns the index of node in the receivers children. 
 		If the receiver does not contain node, -1 will be returned. */
@@ -113,18 +117,21 @@ public class DecisionNode implements TreeNode{
 	}
 	
 	// interface method getAllowsChildren
+    @Override
 	public boolean getAllowsChildren(){
 		/* Returns true if the receiver allows children. */
 		return this.allowsChildren;
 	}
 	
 	// interface method isLeaf
+    @Override
 	public boolean isLeaf(){
 		/* Returns true if the receiver is a leaf. */
 		return this.children.isEmpty();
 	}
 	
 	// interface method children
+    @Override
 	public Enumeration children(){
 		/* Returns the children of the receiver as an Enumeration. */
 		return this.children.elements();

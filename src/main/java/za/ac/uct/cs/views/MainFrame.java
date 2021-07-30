@@ -8,6 +8,8 @@ package za.ac.uct.cs.views;
 import java.io.File;
 import javax.swing.JFileChooser;
 
+import za.ac.uct.cs.controllers.Questions;
+
 /**
  *
  * @author SteveW
@@ -17,14 +19,16 @@ public class MainFrame extends javax.swing.JFrame {
     private File owl_file;
     private String owl_file_path;
     private String current_entity_name;
+    private Questions question_controller;
     
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
+        this.owl_file = null;
+        this.owl_file_path = "";
+        this.question_controller = new Questions();
         initComponents();
-        owl_file = null;
-        owl_file_path = "";
     }
 
     /**
