@@ -3,20 +3,15 @@ package za.ac.uct.cs.models;
 
 import java.lang.RuntimeException;
 
-public enum YES_NO_OPTIONS{
-	1("Yes"), 2("No");
+enum YES_NO_OPTIONS{
+	Yes(1), No(2);
 	
-	private String text;
+	public final int value;
 	
-	public YES_NO_OPTIONS(String text){
-		this.text = text;
+	private YES_NO_OPTIONS(int value){
+		this.value = value;
 	}
-
-	@Override
-	public String toString(){
-		return this.text;
-	}
-} /// TODO: Move to tree creation ctrl class
+} /// TODO: Move to tree creation ctrl class (make private)
 
 public class Decision{
 	// each decision has a question and potential answers.
