@@ -31,7 +31,7 @@ public class Decision{
 		this.fixedChoices = fixed;
 	}
 
-	public void setChoices(Enum choices) throws RuntimeException {
+	public void setChoices(Enum[] choices) throws RuntimeException {
 		if (!this.fixedChoices){
 			this.choices = choices;
 			return;
