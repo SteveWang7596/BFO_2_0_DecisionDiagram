@@ -102,7 +102,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="btnInsertAxiom" max="32767" attributes="0"/>
-                              <Component id="nextQuestion" pref="177" max="32767" attributes="0"/>
+                              <Component id="btnNextQuestion" pref="177" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -133,7 +133,7 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnPrevQuestion" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="nextQuestion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnNextQuestion" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -221,7 +221,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPrevQuestionActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="nextQuestion">
+        <Component class="javax.swing.JButton" name="btnNextQuestion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Next Question &gt;"/>
           </Properties>

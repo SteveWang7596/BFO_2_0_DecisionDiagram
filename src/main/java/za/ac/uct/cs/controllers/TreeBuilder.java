@@ -5,6 +5,7 @@ import za.ac.uct.cs.models.DecisionNode;
 
 public class TreeBuilder{
 	// make everything static?
+	// think about how to indicate that en early stop is possible...
 	private DecisionNode root;
 	private boolean builtTree = false;
 

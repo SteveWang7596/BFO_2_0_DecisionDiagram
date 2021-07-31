@@ -29,7 +29,9 @@ public class MainFrame extends javax.swing.JFrame {
         this.owl_file_path = "";
         this.question_controller = new Questions();
         this.question_controller.begin();
+        assert (this.question_controller.isFirstQuestion());
         initComponents();
+        enableSelection(false);
     }
 
     /**
@@ -53,7 +55,7 @@ public class MainFrame extends javax.swing.JFrame {
         txtAreaQuestion = new javax.swing.JTextArea();
         cbQuestionOptions = new javax.swing.JComboBox<>();
         btnPrevQuestion = new javax.swing.JButton();
-        nextQuestion = new javax.swing.JButton();
+        btnNextQuestion = new javax.swing.JButton();
         btnInsertAxiom = new javax.swing.JButton();
         txtAxiom = new javax.swing.JTextField();
         MenuBar = new javax.swing.JMenuBar();
@@ -106,7 +108,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        nextQuestion.setText("Next Question >");
+        btnNextQuestion.setText("Next Question >");
 
         btnInsertAxiom.setText("Insert Axiom");
 
@@ -141,7 +143,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnInsertAxiom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(nextQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))))
+                            .addComponent(btnNextQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -165,7 +167,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPrevQuestion)
-                    .addComponent(nextQuestion))
+                    .addComponent(btnNextQuestion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInsertAxiom)
@@ -235,7 +237,11 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEntityNameActionPerformed
 
     private void btnEntityNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntityNameActionPerformed
-        setCurrentEntityName(txtEntityName.getText());
+        String text = txtEntityName.getText();
+        if (txtEntityName.isEnabled() && !text.equals("")){
+            setCurrentEntityName(text);
+            resetSelection();
+        }
     }//GEN-LAST:event_btnEntityNameActionPerformed
 
     private void cbQuestionOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbQuestionOptionsActionPerformed
@@ -244,6 +250,13 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnPrevQuestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevQuestionActionPerformed
         // TODO add your handling code here:
+        try {
+            this.question_controller.goToPreviousQuestion();
+            resetSelection();
+        }
+        catch(NullPointerException ex){
+            btnPrevQuestion.setEnabled(false);
+        }
     }//GEN-LAST:event_btnPrevQuestionActionPerformed
 
     private void setCurrentEntityName(String entity_name)
@@ -251,6 +264,22 @@ public class MainFrame extends javax.swing.JFrame {
         current_entity_name = entity_name;
         txtEntityName.setEnabled(false);
         System.out.println("Current entity name: " + current_entity_name);
+    }
+    
+    private void enableSelection(boolean enable){
+        // enables or disables the form items used for processing questions
+        btnPrevQuestion.setEnabled(enable);
+        btnNextQuestion.setEnabled(enable);
+        btnInsertAxiom.setEnabled(enable);
+        cbQuestionOptions.setEnabled(enable);
+    }
+    
+    private void resetSelection(){
+        /// TODO: use current question to fill in question text and answer options
+        cbQuestionOptions.setEnabled(true);
+        // freeze/unfreeze next/prev buttons if at root/leaves
+        btnPrevQuestion.setEnabled(!this.question_controller.isFirstQuestion());
+        btnNextQuestion.setEnabled(!this.question_controller.isFinalQuestion());
     }
             
     /**
@@ -295,6 +324,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JButton btnEntityName;
     private javax.swing.JButton btnInsertAxiom;
+    private javax.swing.JButton btnNextQuestion;
     private javax.swing.JButton btnPrevQuestion;
     private javax.swing.JComboBox<String> cbQuestionOptions;
     private javax.swing.JMenu jMenu2;
@@ -302,7 +332,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblEntityName;
     private javax.swing.JLabel lblOwlFile;
-    private javax.swing.JButton nextQuestion;
     private javax.swing.JScrollPane spQuestion;
     private javax.swing.JTextArea txtAreaQuestion;
     private javax.swing.JTextField txtAxiom;

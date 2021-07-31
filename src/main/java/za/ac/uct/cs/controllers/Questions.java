@@ -18,8 +18,12 @@ public class Questions{
 		// process answer
 	}
 
-	public void goToPreviousQuestion(){
-		this.currentQuestion = (DecisionNode)this.currentQuestion.getParent();
+	public void goToPreviousQuestion() throws NullPointerException {
+		if (!this.isFirstQuestion()){
+			this.currentQuestion = (DecisionNode)this.currentQuestion.getParent();
+			return;
+		}
+		throw new NullPointerException("There is no previous question.");
 	}
 
 	public String getQuestion(){
@@ -36,5 +40,15 @@ public class Questions{
 	        ++index;
 	    }
 	    return answerOptions;
+	}
+
+	public boolean isFirstQuestion(){
+		if (this.currentQuestion == null) { return true; } // yes/no?
+		return (this.currentQuestion.getParent() == null);
+	}
+
+	public boolean isFinalQuestion(){
+		if (this.currentQuestion == null) { return true; } // yes/no?
+		return this.currentQuestion.isLeaf();
 	}
 }
