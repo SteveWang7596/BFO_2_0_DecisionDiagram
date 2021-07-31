@@ -12,7 +12,7 @@ import za.ac.uct.cs.controllers.Questions;
 
 /**
  *
- * @author SteveW
+ * @author SteveW, ChiadikaE
  */
 public class MainFrame extends javax.swing.JFrame {
 
@@ -28,6 +28,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.owl_file = null;
         this.owl_file_path = "";
         this.question_controller = new Questions();
+        this.question_controller.begin();
         initComponents();
     }
 
