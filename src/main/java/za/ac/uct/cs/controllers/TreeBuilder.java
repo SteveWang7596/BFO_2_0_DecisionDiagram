@@ -8,6 +8,8 @@ public class TreeBuilder{
 	// think about how to indicate that en early stop is possible...
 	private DecisionNode root;
 	private boolean builtTree = false;
+        
+        private static final String BFO_2_0_DEFAULT_PATH = "za/ac/uct/cs/xml/BFO_2_0_decision_tree.xml";
 
 	public void buildTree(){
 		/// TODO

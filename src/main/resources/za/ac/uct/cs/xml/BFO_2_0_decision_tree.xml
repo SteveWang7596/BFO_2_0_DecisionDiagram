@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tree>
+	<title>BFO 2.0 Decision Tree</title>
+	<descrption>Decision Tree for BFO 2.0</descrption>
+	<branch id="1">
+		<content>Does [] persist in time or unfold in time?</content>
+		<fork target="1.1">Persist in time</fork>
+		<fork target="1.2">Unfold in time</fork>
+		<concept>Entity</concept>
+	</branch>
+	<branch id="1.1">
+		<concept>Continuant</concept>
+	</branch>
+	<branch id="1.2">
+		<concept>Occurrent</concept>
+	</branch>
+</tree>
