@@ -15,6 +15,7 @@ public class DecisionNode implements TreeNode{
 	private boolean allowsChildren;
 	private Vector<DecisionNode> children;
 	private Decision value;
+	/// TODO: ADD ID
 
 	/// TODO: compare, setters (maybe?), (protected) addChildAtIndex
 	public DecisionNode(){

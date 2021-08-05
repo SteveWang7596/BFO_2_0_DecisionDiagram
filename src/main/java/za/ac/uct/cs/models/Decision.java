@@ -16,6 +16,7 @@ enum YES_NO_OPTIONS{
 public class Decision{
 	// each decision has a question and potential answers.
 	public final String question;
+	private String axiom;
 	private Enum[] choices;
 	private boolean fixedChoices;
 
@@ -45,5 +46,13 @@ public class Decision{
 
 	public Enum[] getChoices(){
 		return this.choices;
+	}
+
+	public void setAxiom(String axiom){
+		this.axiom = axiom;
+	}
+
+	public String getAxiom(){
+		return this.axiom;
 	}
 }

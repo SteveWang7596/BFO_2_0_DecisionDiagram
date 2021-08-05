@@ -7,11 +7,16 @@ import za.ac.uct.cs.models.DecisionNode;
 public class Questions{
 	/// TODO
 	private DecisionNode currentQuestion;
+    private String currentAxiom;
 
 	public void begin(){
 		TreeBuilder decisionTree = new TreeBuilder();
 		decisionTree.buildTree();
 		this.currentQuestion = decisionTree.getRoot();
+		String axiom = this.currentQuestion.getValue().getAxiom();
+	    // if axiom property of current question is not null,
+        // set current axiom to current question's axiom.
+        this.currentAxiom = (axiom != null)? axiom : "";
 	}
 
 	public void processAnswer(int answer){
@@ -21,6 +26,7 @@ public class Questions{
 	public void goToPreviousQuestion() throws NullPointerException {
 		if (!this.isFirstQuestion()){
 			this.currentQuestion = (DecisionNode)this.currentQuestion.getParent();
+			this.currentAxiom = this.findPreviousAxiom();
 			return;
 		}
 		throw new NullPointerException("There is no previous question.");
@@ -29,6 +35,10 @@ public class Questions{
 	public String getQuestion(){
 		return this.currentQuestion.getValue().question;
 	}
+        
+    public String getAxiom(){
+        return this.currentAxiom;
+    }
 
 	public String[] getAnswerOptions(){
 		/// TODO: documentation
@@ -50,5 +60,16 @@ public class Questions{
 	public boolean isFinalQuestion(){
 		if (this.currentQuestion == null) { return true; } // yes/no?
 		return this.currentQuestion.isLeaf();
+	}
+
+	protected String findPreviousAxiom(){
+		/// TODO: documentation and testing
+		if (this.currentQuestion.getAxiom() == null){ return this.currentAxiom; }
+		DecisionNode q = this.currentQuestion;
+		while(q != null && q.getAxiom() == null){
+			q = q.getParent();
+		}
+		String a = q.getAxiom();
+		return (a != null)? a : "";
 	}
 }
