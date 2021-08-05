@@ -271,8 +271,21 @@ public class MainFrame extends javax.swing.JFrame {
     }
     
     private void resetSelection(){
-        /// TODO: use current question to fill in question text and answer options
+        // use current question to fill in question text and answer options
+        cbQuestionOptions.removeAllItems();
+        txtAreaQuestion.setText(
+            this.question_controller.getQuestion().replaceAll(
+                "\\[\\]", 
+                this.current_entity_name
+            )
+        );
+        String[] options = this.question_controller.getAnswerOptions();
+        for (String option: options) { cbQuestionOptions.addItem(option); }
         cbQuestionOptions.setEnabled(true);
+        // update axiom and unfreeze axiom import button
+        String axiom = this.question_controller.getAxiom();
+        txtAxiom.setText(axiom);
+        btnInsertAxiom.setEnabled(!axiom.equals(""));
         // freeze/unfreeze next/prev buttons if at root/leaves
         btnPrevQuestion.setEnabled(!this.question_controller.isFirstQuestion());
         btnNextQuestion.setEnabled(!this.question_controller.isFinalQuestion());

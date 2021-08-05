@@ -19,7 +19,7 @@ public class Questions{
         this.currentAxiom = (axiom != null)? axiom : "";
 	}
 
-	public void processAnswer(int answer){
+	public void processAnswer(String answer){
 		// process answer
 	}
 
