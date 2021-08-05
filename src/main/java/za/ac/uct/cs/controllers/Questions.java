@@ -64,12 +64,13 @@ public class Questions{
 
 	protected String findPreviousAxiom(){
 		/// TODO: documentation and testing
-		if (this.currentQuestion.getAxiom() == null){ return this.currentAxiom; }
+		//if (this.currentQuestion.getAxiom() == null){ return this.currentAxiom; }
 		DecisionNode q = this.currentQuestion;
-		while(q != null && q.getAxiom() == null){
-			q = q.getParent();
-		}
-		String a = q.getAxiom();
-		return (a != null)? a : "";
+		//while(q != null && q.getAxiom() == null){
+			//q = q.getParent();
+		//}
+		//String a = q.getAxiom();
+		//return (a != null)? a : "";
+                return null;
 	}
 }
