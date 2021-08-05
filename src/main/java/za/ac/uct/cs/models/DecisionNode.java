@@ -11,6 +11,7 @@ public class DecisionNode implements TreeNode{
 
 	private static int DEFAULT_CHILD_CAPACITY = 3;
 
+	private final String ID;
 	private DecisionNode parent;
 	private boolean allowsChildren;
 	private Vector<DecisionNode> children;
@@ -18,14 +19,15 @@ public class DecisionNode implements TreeNode{
 	/// TODO: ADD ID
 
 	/// TODO: compare, setters (maybe?), (protected) addChildAtIndex
-	public DecisionNode(){
+	public DecisionNode(String id){
+		this.id = id;
 		this.value = null;
 		this.parent = null;
 		this.children = new Vector<DecisionNode>(DEFAULT_CHILD_CAPACITY);
 		this.allowsChildren = true;
 	}
 
-	public DecisionNode(TreeNode node){
+	public DecisionNode(String id, TreeNode node){
 		this.parent = new DecisionNode(node.getParent());
 		this.parent.addChild(this);
 
@@ -41,10 +43,13 @@ public class DecisionNode implements TreeNode{
 			this.children = new Vector<DecisionNode>(0, 0);
 		}
 		
+		this.id = id;
 		this.value = null;
 	}
 
-	public DecisionNode(DecisionNode parent, Decision value, boolean allowsChildren, Collection<DecisionNode> children){
+	public DecisionNode(String id, DecisionNode parent, Decision value, boolean allowsChildren, Collection<DecisionNode> children){
+		this.id = id;
+
 		this.parent = parent;
 		this.parent.addChild(this);
 
@@ -53,7 +58,9 @@ public class DecisionNode implements TreeNode{
 		this.value = value;
 	}
 
-	public DecisionNode(DecisionNode parent, Decision value){
+	public DecisionNode(String id, DecisionNode parent, Decision value){
+		this.id = id;
+
 		this.parent = parent;
 		this.parent.addChild(this);
 
@@ -62,7 +69,9 @@ public class DecisionNode implements TreeNode{
 		this.children = new Vector<DecisionNode>(DEFAULT_CHILD_CAPACITY);
 	}
 
-	public DecisionNode(DecisionNode parent, Decision value, boolean allowsChildren){
+	public DecisionNode(String id, DecisionNode parent, Decision value, boolean allowsChildren){
+		this.id = id;
+
 		this.parent = parent;
 		this.parent.addChild(this);
 
@@ -86,6 +95,15 @@ public class DecisionNode implements TreeNode{
 		/// TODO: other checks
 		if (node == this) { return true; }
 		return false;
+	}
+
+	public DecisionNode getChildAt(String childId){
+		/* Returns the child TreeNode with ID childId. */
+		for (DecisionNode child : this.children){
+			if (child.ID.equals(childId)){
+				return child;
+			}
+		}
 	}
 
 	// interface method getChildAt
