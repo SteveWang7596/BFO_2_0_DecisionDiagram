@@ -156,7 +156,7 @@
 	</branch>
 	<branch id="1.2.1.1.2">
 		<content>Is [] a collection of disjoint part-processes?</content>
-		<fork traget="1.2.1.1.2.1">Yes</fork>
+		<fork target="1.2.1.1.2.1">Yes</fork>
 	</branch>
 	<branch id="1.2.1.1.2.1">
 		<concept>Process Profile</concept>

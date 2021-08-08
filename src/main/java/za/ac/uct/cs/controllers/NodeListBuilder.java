@@ -86,7 +86,12 @@ public class NodeListBuilder{
     }
     
     private static String getConceptName(Element element){
-        return element.getElementsByTagName(XMLTag.CONCEPT).item(0).getTextContent();
+        NodeList list = element.getElementsByTagName(XMLTag.CONCEPT);
+        
+        if (list.item(0) == null)
+            return null;
+        else
+            return list.item(0).getTextContent();
     }
     
     private static boolean isLeafNode(Element element){
