@@ -10,7 +10,7 @@ public class Questions{
     private String currentAxiom;
 
 	public void begin(){
-		TreeBuilder decisionTree = new TreeBuilder();
+		NodeListBuilder decisionTree = new NodeListBuilder();
 		decisionTree.buildTree();
 		this.currentQuestion = decisionTree.getRoot();
 		String axiom = this.currentQuestion.getValue().getAxiom();

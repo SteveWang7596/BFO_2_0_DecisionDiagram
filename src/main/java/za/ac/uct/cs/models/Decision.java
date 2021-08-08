@@ -2,6 +2,7 @@
 package za.ac.uct.cs.models;
 
 import java.lang.RuntimeException;
+import java.util.Map;
 
 enum YES_NO_OPTIONS{
 	Yes(1), No(2);
@@ -14,12 +15,37 @@ enum YES_NO_OPTIONS{
 } /// TODO: Move to tree creation ctrl class (make private)
 
 public class Decision{
-	// each decision has a question and potential answers.
-	public final String question;
-	private String axiom;
-	private Enum[] choices;
-	private boolean fixedChoices;
+    // each decision has a question and potential answers.
+    public final String question;
+    private Map<String, String> answer_target_map;
+    //private String axiom;
+    //private Enum[] choices;
+    //private boolean fixedChoices;
 
+    public Decision(String question, Map<String, String> answer_target_map){
+        this.question = question;
+        this.answer_target_map = answer_target_map;
+    }
+    
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append("\t\t")
+                .append("Question = ")
+                .append(this.question);
+        
+        for (String key: this.answer_target_map.keySet()){
+            sb.append("\n\t\t\t\t")
+                    .append("Answer = ")
+                    .append(key)
+                    .append(" : target id = ")
+                    .append(this.answer_target_map.get(key));
+        }
+        
+        return sb.toString();
+    }
+    
+        /*
 	public Decision(String question){
 		this.question = question;
 		this.choices = null;
@@ -54,5 +80,5 @@ public class Decision{
 
 	public String getAxiom(){
 		return this.axiom;
-	}
+	}*/
 }
