@@ -10,8 +10,173 @@
 	</branch>
 	<branch id="1.1">
 		<concept>Continuant</concept>
+		<content>Is [] a property of another entity or depends on at least one other entity?</content>
+		<fork target="1.1.1">No</fork>
+		<fork target="1.1.2">Yes</fork>
+	</branch>
+	<branch id="1.1.1">
+		<concept>Independent Continuant</concept>
+		<content>When does [] have some portion of matter as a continuant part?</content>
+		<fork target="1.1.1.1">Never</fork>
+		<fork target="1.1.1.2">Always</fork>
+	</branch>
+	<branch id="1.1.1.1">
+		<concept>Immaterial Entity</concept>
+		<content>Is this []'s location determined relative to some material entity?</content>
+ 		<fork target="1.1.1.1.1">Yes</fork>
+		<fork target="1.1.1.1.2">No</fork>
+	</branch>
+	<branch id="1.1.1.1.1">
+		<content>How many dimensions does [] have?</content>
+		<fork target="1.1.1.1.1.1">0-2</fork>
+		<fork target="1.1.1.1.1.2">3</fork>
+	</branch>
+	<branch id="1.1.1.1.1.1">
+		<concept>Continuant Fiat Boundary</concept>
+		<content>How many dimensions does [] have?</content>
+		<fork target="1.1.1.1.1.1.1">0</fork>
+		<fork target="1.1.1.1.1.1.2">1</fork>
+		<fork target="1.1.1.1.1.1.3">2</fork>
+	</branch>
+	<branch id="1.1.1.1.1.1.1">
+		<concept>Zero-dimensional Continuant Boundary</concept>
+	</branch>
+	<branch id="1.1.1.1.1.1.2">
+		<concept>One-dimensional Continuant Fiat Boundary</concept>
+	</branch>
+	<branch id="1.1.1.1.1.1.3">
+		<concept>Two-dimensional Continuant Fiat Boundary</concept>
+	</branch>
+	<branch id="1.1.1.1.1.2">
+		<concept>Site</concept>
+	</branch>
+	<branch id="1.1.1.1.2">
+		<content>Is the [] a spatial projection of a portion of space-time?</content>
+		<fork target="1.1.1.1.2.1">Yes</fork>
+	</branch>
+	<branch id="1.1.1.1.2.1">
+		<concept>Spatial Region</concept>
+		<content>How many dimensions does this [] have?</content>
+		<fork target="1.1.1.1.2.1.1">0</fork>
+		<fork target="1.1.1.1.2.1.2">1</fork>
+		<fork target="1.1.1.1.2.1.3">2</fork>
+		<fork target="1.1.1.1.2.1.4">4</fork>
+	</branch>
+	<branch id="1.1.1.1.2.1.1">
+		<concept>Zero-dimensional Spatial Region</concept>
+	</branch>
+	<branch id="1.1.1.1.2.1.2">
+		<concept>One-dimensional Spatial Region</concept>
+	</branch>
+	<branch id="1.1.1.1.2.1.3">
+		<concept>Two-dimensional Spatial Region</concept>
+	</branch>
+	<branch id="1.1.1.1.2.1.4">
+		<concept>Three-dimensional Spatial Region</concept>
+	</branch>
+	<branch id="1.1.1.2">
+		<concept>Material Entity</concept>
+		<content>Is [] a collection of disjoint self-standing single objects?</content>
+		<fork target="1.1.1.2.1">Yes</fork>
+		<fork target="1.1.1.2.2">No</fork>
+	</branch>
+	<branch id="1.1.1.2.1">
+		<concept>Object Aggregate</concept>
+	</branch>
+	<branch id="1.1.1.2.2">
+		<content>Is [] a proper part of an object, rather than a member of?</content>
+		<fork target="1.1.1.2.2.1">Yes</fork>
+		<fork target="1.1.1.2.2.2">No</fork>
+	</branch>
+	<branch id="1.1.1.2.2.1">
+		<concept>Fiat Object Part</concept>
+	</branch>
+	<branch id="1.1.1.2.2.2">
+		<concept>Object</concept>
+	</branch>
+	<branch id="1.1.2">
+		<content>May [] be copied between a number of bearers?</content>
+		<fork target="1.1.2.1">Yes</fork>
+		<fork target="1.1.2.2">No</fork>
+	</branch>
+	<branch id="1.1.2.1">
+		<concept>Generically Dependent Continuant</concept>
+	</branch>
+	<branch id="1.1.2.2">
+		<concept>Specifically Dependent Continual</concept>
+		<content>Does [] require some further process to be realised?</content>
+		<fork target="1.1.2.2.1">Yes</fork>
+		<fork target="1.1.2.2.2">No</fork>
+	</branch>
+	<branch id="1.1.2.2.1">
+		<concept>Realizable Entity</concept>
+		<content>Does this [] exist because the bearer is in a specific situation?</content>
+		<fork target="1.1.2.2.1.1">Yes</fork>
+		<fork target="1.1.2.2.1.2">No</fork>
+	</branch>
+	<branch id="1.1.2.2.1.1">
+		<concept>Role</concept>
+	</branch>
+	<branch id="1.1.2.2.1.2">
+		<concept>Disposition</concept>
+		<content>Does [] exist (by evolution or design) to realise specific processes?</content>
+		<fork target="1.1.2.2.1.2.1">Yes</fork>
+	</branch>
+	<branch id="1.1.2.2.1.2.1">
+		<concept>Function</concept>
+	</branch>
+	<branch id="1.1.2.2.2">
+		<concept>Quality</concept>
+		<content>Is [] specifically dependent on two or more non-identical entities?</content>
+		<fork target="1.1.2.2.2.1">Yes</fork>
+	</branch>
+	<branch id="1.1.2.2.2.1">
+		<concept>Relational Quality</concept>
 	</branch>
 	<branch id="1.2">
 		<concept>Occurrent</concept>
+		<content>What is[]'s relation to the universal spatiotemporal region?</content>
+		<fork target="1.2.1">Inhabits</fork>
+		<fork target="1.2.2">Portion of</fork>
+		<fork target="1.2.3">Projection of</fork>
+	</branch>
+	<branch id="1.2.1">
+		<content>Does [] have a proper temporal part?</content>
+		<fork target="1.2.1.1">Yes</fork>
+		<fork target="1.2.1.2">No</fork>
+	</branch>
+	<branch id="1.2.1.1">
+		<concept>Process</concept>
+		<content>Is [] the sum of the totality of processes in a material entity's spatiotemporal region?</content>
+		<fork target="1.2.1.1.1">Yes</fork>
+		<fork target="1.2.1.1.2">No</fork>
+	</branch>
+	<branch id="1.2.1.1.1">
+		<concept>History</concept>
+	</branch>
+	<branch id="1.2.1.1.2">
+		<content>Is [] a collection of disjoint part-processes?</content>
+		<fork traget="1.2.1.1.2.1">Yes</fork>
+	</branch>
+	<branch id="1.2.1.1.2.1">
+		<concept>Process Profile</concept>
+	</branch>
+	<branch id="1.2.1.2">
+		<concept>Process Boundary</concept>
+	</branch>
+	<branch id="1.2.2">
+		<concept>Spatiotemporal Region</concept>
+	</branch>
+	<branch id="1.2.3">
+		<concept>Temporal Region</concept>
+		<content>How many dimensions does [] have?</content>
+		<fork target="1.2.3.1">0</fork>
+		<fork target="1.2.3.2">1</fork>
+	</branch>
+	<branch id="1.2.3.1">
+		<concept>Zero-dimensional Temporal Region</concept>
+	</branch>
+	<branch id="1.2.3.2">
+		<concept>One-dimensional Temporal Region</concept>
 	</branch>
 </tree>
