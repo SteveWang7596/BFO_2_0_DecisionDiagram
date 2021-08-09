@@ -68,12 +68,7 @@ public class NodeListBuilder{
                 Element node_element = (Element) node;
                 String node_id = getBranchId(node_element);
                 System.out.println("initialising node : " + node_id);
-                DecisionNode decisionNode = new DecisionNode(
-                        node_id, 
-                        getConceptName(node_element), 
-                        isLeafNode(node_element), 
-                        getChildrenIds(node_element), 
-                        getDecision(node_element));
+                DecisionNode decisionNode = new DecisionNode(node_id, getDecision(node_element));
                 NodeMap.put(node_id, decisionNode);
             }
         }
@@ -116,37 +111,34 @@ public class NodeListBuilder{
     
     private static Decision getDecision(Element element){
         NodeList question_list = element.getElementsByTagName(XMLTag.CONTENT);
-        //System.out.println("QuestionList: " + question_list);
-        if (question_list.item(0) == null){
-            return null;
-        }
-        //System.out.println("item = " + question_list.item(0));
-        String question = question_list.item(0).getTextContent();
+        String question = null;
+        Map<String, String> answer_target = null;
         
-        Map<String, String> answer_target = new HashMap<String, String>();
+        if (question_list.item(0) != null){
+            question = question_list.item(0).getTextContent();
+            
+            answer_target = new HashMap<String, String>();
         
-        NodeList forkList = element.getElementsByTagName(XMLTag.FORK);
-        for (int i=0; i<forkList.getLength(); i++){
-            Node node = forkList.item(i);
-            if (node.getNodeType() == Node.ELEMENT_NODE){
-                Element fork_element = (Element)node;
-                String target_id = fork_element.getAttributes().getNamedItem(XMLTag.TRAGET).getTextContent();
-                String answer = fork_element.getTextContent();
-                answer_target.put(answer, target_id);
+            NodeList forkList = element.getElementsByTagName(XMLTag.FORK);
+            for (int i=0; i<forkList.getLength(); i++){
+                Node node = forkList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE){
+                    Element fork_element = (Element)node;
+                    String target_id = fork_element.getAttributes().getNamedItem(XMLTag.TRAGET).getTextContent();
+                    String answer = fork_element.getTextContent();
+                    answer_target.put(answer, target_id);
+                }
             }
         }
         
-        return new Decision(question, answer_target);
+        return new Decision(question, answer_target, getConceptName(element));
     }
     
     private static void printNodeMapping(Map<String, DecisionNode> mapping){
         StringBuilder sb = new StringBuilder("Node List:");
         
         for(String key: mapping.keySet()){
-            sb.append("\nNode Id: ")
-                    .append(key)
-                    .append("\n")
-                    .append("\t")
+            sb.append("\n")
                     .append(mapping.get(key).toString());
         }
         
