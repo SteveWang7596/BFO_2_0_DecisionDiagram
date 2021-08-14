@@ -3,64 +3,57 @@ package za.ac.uct.cs.models;
 
 import java.util.List;
 
-public class DecisionNode{
+public class DecisionNode {
 
     private final String id;
-    private Decision decision;
+    private Decision value;
         
-    public DecisionNode(String id, Decision decision)
-    {
+    public DecisionNode(String id, Decision value){
         this.id = id;
-        this.decision = decision;
+        this.value = value;
     }
     
     public String getId(){
         return this.id;
     }
     
-    public Decision getDecision(){
-        return this.decision;
+    public Decision getValue(){
+        return this.value;
     }
     
-    public void setDecision(Decision decision){
-        this.decision = decision;
+    public void setDecision(Decision value){
+        this.value = value;
     }
     
     public List<String> getChildrenNodeId(){
-        return this.decision.getAllChildrenNodeId();
+        return this.value.getAllChildrenNodeId();
     }
     
     public String getParentNodeId(){
-        String [] id_part = this.id.split(".");
+        int last_dot = this.id.lastIndexOf(".");      
+        if (last_dot == -1) { return ""; }   
         
-        StringBuilder sb = new StringBuilder();
-        
-        for (String part: id_part){
-            sb.append(part)
-                    .append(".");
-        }
-        
-        String temp = sb.toString();
-        
-        return temp.substring(0, temp.length());
+        String parentId = this.id.substring(0, last_dot); 
+        return parentId;
     }
     
+    @Override
     public String toString(){
-        StringBuilder sb = new StringBuilder();
+        String to_string = String.format(
+            "Node ID: %s%s", 
+            this.id,
+            (this.value == null)? "" : ("\n" + this.value.toString())
+        );
         
-        sb.append("Node ID: ")
-                .append(this.id);
-                
-        if (this.decision != null){
-            sb.append("\n")
-                    .append(this.decision.toString());
-        }
-        
-        return sb.toString();
+        return to_string;
     }
     
-    public Boolean equalTo(DecisionNode other){
-        return (this.id.equals(other.getId()) && this.decision.equals(other.getDecision()));
+    public boolean equals(DecisionNode other){
+        return (this.id.equals(other.getId()) && this.value.equals(other.getValue()));
+    }
+
+    public boolean isLeaf(){
+        return this.value.isLeaf();
     }
     
 }

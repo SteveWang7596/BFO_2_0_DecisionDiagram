@@ -25,6 +25,10 @@ public class NodeListBuilder{
         
     private static final String BFO_2_0_DEFAULT_PATH = "src/main/resources/za/ac/uct/cs/xml/BFO_2_0_decision_tree.xml";
 
+    public static Map<String, DecisionNode> buildNodeList(){
+        return buildNodeList(null);
+    }
+    
     public static Map<String, DecisionNode> buildNodeList(String XML_file_path){
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 

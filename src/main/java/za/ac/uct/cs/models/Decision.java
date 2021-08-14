@@ -6,27 +6,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Decision{
+public class Decision {
     
     public final String question;
     private Map<String, String> answer_target_map;
-    private String concept;
+    public final String axiom;
 
-    public Decision(String question, Map<String, String> answer_target_map, String concept){
+    public Decision(String question, Map<String, String> answer_target_map, String axiom){
         this.question = question;
         this.answer_target_map = answer_target_map;
-        this.concept = concept;
+        this.axiom = axiom;
     }
     
-    public String getConcept(){
-        return this.concept;
+    public String getAxiom() throws NullPointerException {
+        return this.axiom;
     }
     
-    public String getQuestion(){
+    public String getQuestion() throws NullPointerException {
         return this.question;
     }
     
-    public Set<String> getAllAnswers(){
+    public Set<String> getAllAnswers() throws NullPointerException {
         return answer_target_map.keySet();
     }
     
@@ -34,15 +34,16 @@ public class Decision{
         this.answer_target_map = map;
     }
     
-    public void addAnswerTragetPair(String answer, String target){
+    public void addAnswerTargetPair(String answer, String target){
         this.answer_target_map.put(answer, target);
     }
     
-    public String getTarget(String answer){
+    public String getTargetID(String answer) throws NullPointerException {
         return this.answer_target_map.get(answer);
     }
     
-    public Boolean hasTarget(String target){
+    public Boolean pointsToTargetID(String target){
+        if (this.isLeaf()) { return false; }
         for(String key: this.answer_target_map.keySet()){
             if (target.equals(this.answer_target_map.get(key)))
                 return true;
@@ -51,10 +52,11 @@ public class Decision{
     }
     
     public Boolean hasAnswer(String answer){
+        if (this.isLeaf()) { return false; }
         return this.answer_target_map.containsKey(answer);
     }
     
-    public List<String> getAllChildrenNodeId(){
+    public List<String> getAllChildrenNodeId() throws NullPointerException {
         List<String> childrenNodeId = new ArrayList<String>();
         
         for(String key: this.answer_target_map.keySet()){
@@ -75,8 +77,8 @@ public class Decision{
         StringBuilder sb = new StringBuilder();
         
         sb.append("\t")
-                .append("Concept = ")
-                .append(this.concept);
+                .append("Axiom = ")
+                .append(this.axiom);
         
         if (question != null){
             sb.append("\n\tQuestion = ")
@@ -92,16 +94,24 @@ public class Decision{
                         .append(this.answer_target_map.get(key));
             }
         }
+        
         return sb.toString();
     }
     
-    public Boolean equalTo(Decision other){
+    public Boolean equals(Decision other){
         for (String key : this.answer_target_map.keySet()){
-            if (!this.answer_target_map.get(key).equals(other.getTarget(key)))
+            if (!this.answer_target_map.get(key).equals(other.getTargetID(key)))
                 return false;
         }
         
-        return (this.question.equals(other.getQuestion()) && this.concept.equals(other.getConcept()));
+        return (this.question.equals(other.getQuestion()) && this.axiom.equals(other.getAxiom()));
+    }
+
+    public Boolean isLeaf(){
+        if (this.answer_target_map == null) { 
+            return true; 
+        }
+        return this.answer_target_map.isEmpty();
     }
     
 }

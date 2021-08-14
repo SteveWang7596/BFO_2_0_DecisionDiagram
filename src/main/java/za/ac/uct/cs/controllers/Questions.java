@@ -1,46 +1,47 @@
 // methods: processAnswer(answer) or nextQuestion(answer), previousQuestion(), getAnswerOptions()
-// enum for different answer types (YES/NO)(ONE/TWO/THREE/ZERO)(...)
 package za.ac.uct.cs.controllers;
 
 import za.ac.uct.cs.models.DecisionNode;
+import za.ac.uct.cs.controllers.NodeListBuilder;
+import java.util.Map;
+import java.util.Set;
 
 public class Questions{
 	/// TODO
+	private static final String ROOT_ID = "1";
+	private Map<String, DecisionNode> decisionTree;
 	private DecisionNode currentQuestion;
 	private String currentAxiom;
 
 	public void begin(){
-		NodeListBuilder decisionTree = new NodeListBuilder();
-		decisionTree.buildTree();
-		this.currentQuestion = decisionTree.getRoot();
+		NodeListBuilder decisionTreeBuilder = new NodeListBuilder();
+		this.decisionTree = decisionTreeBuilder.buildNodeList();
+		this.currentQuestion = this.decisionTree.get(ROOT_ID);  // decisionTree.getRoot();
 		String axiom = this.currentQuestion.getValue().getAxiom();
 	    // if axiom property of current question is not null,
         // set current axiom to current question's axiom.
 		this.currentAxiom = (axiom != null)? axiom : "";
 	}
 
-	public void processAnswer(String answer) throws EnumConstantNotPresentException {
-		// process answer TODO
-		Enum chosen = null;
-		for (Enum choice : this.currentQuestion.getValue().getChoices()){
-			if (choice.toString().equals(answer)){
-				chosen = choice;
-				break;
-			}
-		}
-		if (chosen == null){
+	public void processAnswer(String answer) throws RuntimeException {
+		if (!this.currentQuestion.getValue().hasAnswer(answer)){
 			// answer is not among the options for current question
-			throw new EnumConstantNotPresentException(chosen, answer);
+			String errorMessage = String.format(
+				"\"%s\" is not a valid option for the question: %s",
+				answer,
+				this.currentQuestion.getValue().question
+			);
+			throw new RuntimeException(errorMessage);
 		}
-		String childId = chosen.value;
-		this.currentQuestion = this.currentQuestion.getChildAt(childId);
+		String childId = this.currentQuestion.getValue().getTargetID(answer);
+		this.currentQuestion = this.decisionTree.get(childId);
 		String axiom = this.currentQuestion.getValue().getAxiom();
 		if (axiom != null) { this.currentAxiom = axiom; }
 	}
 
 	public void goToPreviousQuestion() throws NullPointerException {
 		if (!this.isFirstQuestion()){
-			this.currentQuestion = (DecisionNode)this.currentQuestion.getParent();
+			this.currentQuestion = this.decisionTree.get(this.currentQuestion.getParentNodeId());
 			this.currentAxiom = this.findPreviousAxiom();
 			return;
 		}
@@ -48,7 +49,8 @@ public class Questions{
 	}
 
 	public String getQuestion(){
-		return this.currentQuestion.getValue().question;
+		String question = this.currentQuestion.getValue().question;
+		return (question == null)? "" : question;
 	}
 
 	public String getAxiom(){
@@ -57,19 +59,19 @@ public class Questions{
 
 	public String[] getAnswerOptions(){
 		/// TODO: documentation
-		Enum[] choices = this.currentQuestion.getValue().getChoices();
-		String[] answerOptions = new String[choices.length];
-		int index = 0;
-		for (Enum choice : choices){
-			answerOptions[index] = choice.toString();
-			++index;
+		if (this.isFinalQuestion()) {
+			// there are no more options
+			return new String[0];
 		}
+		Set<String> choices = this.currentQuestion.getValue().getAllAnswers();
+		String[] answerOptions = choices.toArray(new String[0]);
 		return answerOptions;
 	}
 
 	public boolean isFirstQuestion(){
-		if (this.currentQuestion == null) { return true; } // yes/no?
-		return (this.currentQuestion.getParent() == null);
+		if (this.currentQuestion == null) { return false; } // yes/no?
+                if (this.currentQuestion.getParentNodeId().equals("")) { return true; }
+		return (this.currentQuestion.getId() == ROOT_ID);
 	}
 
 	public boolean isFinalQuestion(){
@@ -98,7 +100,7 @@ public class Questions{
 				break;
 			}
 
-			q = (DecisionNode)q.getParent();
+			q = this.decisionTree.get(q.getParentNodeId());
 		}
 		
 		String a = q.getValue().getAxiom();
