@@ -109,8 +109,18 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         btnNextQuestion.setText("Next Question >");
+        btnNextQuestion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextQuestionActionPerformed(evt);
+            }
+        });
 
         btnInsertAxiom.setText("Insert Axiom");
+        btnInsertAxiom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertAxiomActionPerformed(evt);
+            }
+        });
 
         txtAxiom.setEditable(false);
 
@@ -207,12 +217,11 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ImportOWLFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportOWLFileActionPerformed
-        JFileChooser fileChooser = FileChooser;
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        int result = fileChooser.showOpenDialog(this);
+        FileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = FileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION)
         {
-            owl_file = fileChooser.getSelectedFile();
+            owl_file = FileChooser.getSelectedFile();
             owl_file_path = owl_file.getPath();
             txtOwlFilePath.setText(owl_file_path);
             System.out.println("Ontology File: " + owl_file.getName() + ".");
@@ -235,8 +244,8 @@ public class MainFrame extends javax.swing.JFrame {
     private void btnEntityNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntityNameActionPerformed
         String text = txtEntityName.getText();
         if (txtEntityName.isEnabled() && !text.equals("")){
-            setCurrentEntityName(text);
-            resetSelection();
+            this.setCurrentEntityName(text);
+            this.resetSelection();
         }
     }//GEN-LAST:event_btnEntityNameActionPerformed
 
@@ -248,15 +257,31 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             this.question_controller.goToPreviousQuestion();
-            resetSelection();
+            this.resetSelection();
         }
         catch(NullPointerException ex){
-            btnPrevQuestion.setEnabled(false);
+            String error_message = ex.getMessage();
+            if (error_message != null && error_message.equals("There is no previous question.")){
+                btnPrevQuestion.setEnabled(false);
+            }
+            throw ex;
         }
     }//GEN-LAST:event_btnPrevQuestionActionPerformed
 
-    private void setCurrentEntityName(String entity_name)
-    {
+    private void btnInsertAxiomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertAxiomActionPerformed
+        // TODO add your handling code here:
+        this.importAxiomIntoOWLFile();
+    }//GEN-LAST:event_btnInsertAxiomActionPerformed
+
+    private void btnNextQuestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextQuestionActionPerformed
+        // TODO add your handling code here:
+        String selected_answer = cbQuestionOptions.getSelectedItem().toString();
+        System.out.println("Selected answer: " + selected_answer);
+        this.question_controller.processAnswer(selected_answer);
+        this.resetSelection();
+    }//GEN-LAST:event_btnNextQuestionActionPerformed
+
+    private void setCurrentEntityName(String entity_name){
         current_entity_name = entity_name;
         txtEntityName.setEnabled(false);
         System.out.println("Current entity name: " + current_entity_name);
@@ -283,12 +308,20 @@ public class MainFrame extends javax.swing.JFrame {
         for (String option: options) { cbQuestionOptions.addItem(option); }
         cbQuestionOptions.setEnabled(true);
         // update axiom and unfreeze axiom import button
-        String axiom = this.question_controller.getAxiom();
+        String axiom = String.format(
+                "%s \u2291 %s",
+                this.current_entity_name,
+                this.question_controller.getAxiom()
+        );
         txtAxiom.setText(axiom);
         btnInsertAxiom.setEnabled(!axiom.equals(""));
         // freeze/unfreeze next/prev buttons if at root/leaves
         btnPrevQuestion.setEnabled(!this.question_controller.isFirstQuestion());
         btnNextQuestion.setEnabled(!this.question_controller.isFinalQuestion());
+    }
+    
+    private void importAxiomIntoOWLFile(){
+        ///TODO
     }
             
     /**
