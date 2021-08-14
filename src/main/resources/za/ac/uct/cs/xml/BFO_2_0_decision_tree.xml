@@ -135,7 +135,7 @@
 	</branch>
 	<branch id="1.2">
 		<concept>Occurrent</concept>
-		<content>What is[]'s relation to the universal spatiotemporal region?</content>
+		<content>What is []'s relation to the universal spatiotemporal region?</content>
 		<fork target="1.2.1">Inhabits</fork>
 		<fork target="1.2.2">Portion of</fork>
 		<fork target="1.2.3">Projection of</fork>

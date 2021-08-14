@@ -6,9 +6,13 @@
 package za.ac.uct.cs.views;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 import za.ac.uct.cs.controllers.Questions;
+import za.ac.uct.cs.controllers.OWLHandler;
 
 /**
  *
@@ -16,20 +20,20 @@ import za.ac.uct.cs.controllers.Questions;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private File owl_file;
-    private String owl_file_path;
+    // private File owl_file; // TODO: REMOVE
+    private String default_owl_file_path;
     private String current_entity_name;
     private Questions question_controller;
+    private OWLHandler owl_handler;
     
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
-        this.owl_file = null;
-        this.owl_file_path = "";
+        // this.owl_file = null; // TODO: REMOVE
+        this.default_owl_file_path = "src/main/resources/za/ac/uct/cs/owl/BFO_2_0.owl";
         this.question_controller = new Questions();
-        this.question_controller.begin();
-        assert (this.question_controller.isFirstQuestion());
+        initDecisionProcess();
         initComponents();
         enableSelection(false);
     }
@@ -61,26 +65,17 @@ public class MainFrame extends javax.swing.JFrame {
         MenuBar = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         ImportOWLFile = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuEdit = new javax.swing.JMenu();
+        jMenuRestart = new javax.swing.JMenuItem();
+        jMenuRemoveEntity = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lblOwlFile.setText("OWL File: ");
 
         txtOwlFilePath.setEditable(false);
-        txtOwlFilePath.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtOwlFilePathActionPerformed(evt);
-            }
-        });
 
         lblEntityName.setText("Entity Name:");
-
-        txtEntityName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEntityNameActionPerformed(evt);
-            }
-        });
 
         btnEntityName.setText("Confirm");
         btnEntityName.addActionListener(new java.awt.event.ActionListener() {
@@ -95,11 +90,6 @@ public class MainFrame extends javax.swing.JFrame {
         spQuestion.setViewportView(txtAreaQuestion);
 
         cbQuestionOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbQuestionOptions.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbQuestionOptionsActionPerformed(evt);
-            }
-        });
 
         btnPrevQuestion.setText("< Previous Question");
         btnPrevQuestion.addActionListener(new java.awt.event.ActionListener() {
@@ -197,8 +187,25 @@ public class MainFrame extends javax.swing.JFrame {
 
         MenuBar.add(FileMenu);
 
-        jMenu2.setText("Edit");
-        MenuBar.add(jMenu2);
+        jMenuEdit.setText("Edit");
+
+        jMenuRestart.setText("Restart");
+        jMenuRestart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuRestartActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuRestart);
+
+        jMenuRemoveEntity.setText("Change Entity");
+        jMenuRemoveEntity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuRemoveEntityActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuRemoveEntity);
+
+        MenuBar.add(jMenuEdit);
 
         setJMenuBar(MenuBar);
 
@@ -221,25 +228,26 @@ public class MainFrame extends javax.swing.JFrame {
         int result = FileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION)
         {
-            owl_file = FileChooser.getSelectedFile();
-            owl_file_path = owl_file.getPath();
-            txtOwlFilePath.setText(owl_file_path);
-            System.out.println("Ontology File: " + owl_file.getName() + ".");
-            System.out.println("From path: " + owl_file_path);
+            File owl_file = FileChooser.getSelectedFile();
+            try{
+                this.owl_handler = new OWLHandler(owl_file.getPath());
+            }
+            catch (
+                NullPointerException 
+                | OWLOntologyCreationException 
+                | FileNotFoundException 
+                | AssertionError ex
+            )
+            { return; } // add error popup: Could not load owl file...
+            txtOwlFilePath.setText(this.owl_handler.filepath());
+            System.out.println("Ontology File: " + this.owl_handler.filename());
+            System.out.println("From path: " + this.owl_handler.filepath());
         }
         else
         {
             System.out.println("User cancelled owl file selection process.");
         }
     }//GEN-LAST:event_ImportOWLFileActionPerformed
-
-    private void txtOwlFilePathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOwlFilePathActionPerformed
-        // Unreachable code txtOwlFilePath is uneditable
-    }//GEN-LAST:event_txtOwlFilePathActionPerformed
-
-    private void txtEntityNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEntityNameActionPerformed
-        setCurrentEntityName(txtEntityName.getText());
-    }//GEN-LAST:event_txtEntityNameActionPerformed
 
     private void btnEntityNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntityNameActionPerformed
         String text = txtEntityName.getText();
@@ -248,10 +256,6 @@ public class MainFrame extends javax.swing.JFrame {
             this.resetSelection();
         }
     }//GEN-LAST:event_btnEntityNameActionPerformed
-
-    private void cbQuestionOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbQuestionOptionsActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbQuestionOptionsActionPerformed
 
     private void btnPrevQuestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevQuestionActionPerformed
         // TODO add your handling code here:
@@ -280,6 +284,24 @@ public class MainFrame extends javax.swing.JFrame {
         this.question_controller.processAnswer(selected_answer);
         this.resetSelection();
     }//GEN-LAST:event_btnNextQuestionActionPerformed
+
+    private void jMenuRestartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRestartActionPerformed
+        // TODO add your handling code here:
+        this.initDecisionProcess();
+        this.resetSelection();
+    }//GEN-LAST:event_jMenuRestartActionPerformed
+
+    private void jMenuRemoveEntityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRemoveEntityActionPerformed
+        // TODO add your handling code here:
+        this.enableSelection(false);
+        // clear all questions, selection options and axioms
+        txtAreaQuestion.setText("");
+        txtAxiom.setText("");
+        cbQuestionOptions.removeAllItems();
+        txtEntityName.setEnabled(true);
+        // reset decision tree
+        this.initDecisionProcess();
+    }//GEN-LAST:event_jMenuRemoveEntityActionPerformed
 
     private void setCurrentEntityName(String entity_name){
         current_entity_name = entity_name;
@@ -320,8 +342,47 @@ public class MainFrame extends javax.swing.JFrame {
         btnNextQuestion.setEnabled(!this.question_controller.isFinalQuestion());
     }
     
+    private void initDecisionProcess(){
+        // reset the decision tree
+        this.question_controller.begin();
+        if (!this.question_controller.isFirstQuestion()) { 
+            throw new AssertionError("Restart should return to the first question."); 
+        }
+    }
+    
     private void importAxiomIntoOWLFile(){
-        ///TODO
+        ///TODO: documentation
+        /// FIXME: Talking points: give user option of saving changes on exit (allow them to change file name/location)
+        ///        also have temporary storage in case of system failure (not sure how to manage that though)
+        /// TODO: check if owl file selected (prompt or select default?) [if default, make a oopy/ask where to save copy]
+        if (this.owl_handler == null) {
+            /// FIXME: this doesn't work!!!
+            try {
+                this.owl_handler = new OWLHandler(this.default_owl_file_path);
+            }
+            catch (Exception ex){
+                /// TODO
+            }
+        }
+        // confirm insert and owl file
+        String message = String.format(
+            "Are you sure you want to import \"%s\" into %s",
+            txtAxiom.getText(),
+            // owl file/ontology name (ps can i get ontology name from owl file: iri maybe?)
+            this.owl_handler.filename()
+        );
+        
+        int accept_import = JOptionPane.showConfirmDialog(
+            this, message, "Confirm Axiom Import", JOptionPane.YES_NO_OPTION
+        );
+        
+        if (accept_import == JOptionPane.YES_OPTION){
+            /// TODO
+            System.out.println("Importing \""+txtAxiom.getText()+"\" into "+this.owl_handler.filename());
+            String axiom_superclass = this.question_controller.getAxiom();
+            boolean success = this.owl_handler.addClassAxiom(this.current_entity_name, "SubClassOf", axiom_superclass);
+            System.out.println((success)? "success" : "failure");
+        }
     }
             
     /**
@@ -369,7 +430,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnNextQuestion;
     private javax.swing.JButton btnPrevQuestion;
     private javax.swing.JComboBox<String> cbQuestionOptions;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenuEdit;
+    private javax.swing.JMenuItem jMenuRemoveEntity;
+    private javax.swing.JMenuItem jMenuRestart;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblEntityName;
