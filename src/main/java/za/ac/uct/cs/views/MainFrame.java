@@ -75,7 +75,13 @@ public class MainFrame extends javax.swing.JFrame {
 
         txtOwlFilePath.setEditable(false);
 
-        lblEntityName.setText("Entity Name:");
+        lblEntityName.setText("Entity Label:");
+
+        txtEntityName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEntityNameActionPerformed(evt);
+            }
+        });
 
         btnEntityName.setText("Confirm");
         btnEntityName.addActionListener(new java.awt.event.ActionListener() {
@@ -303,6 +309,11 @@ public class MainFrame extends javax.swing.JFrame {
         this.initDecisionProcess();
     }//GEN-LAST:event_jMenuRemoveEntityActionPerformed
 
+    private void txtEntityNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEntityNameActionPerformed
+        // Allows user to type enter instead of having to click button.
+        btnEntityNameActionPerformed(evt);
+    }//GEN-LAST:event_txtEntityNameActionPerformed
+
     private void setCurrentEntityName(String entity_name){
         current_entity_name = entity_name;
         txtEntityName.setEnabled(false);
@@ -354,7 +365,7 @@ public class MainFrame extends javax.swing.JFrame {
         ///TODO: documentation
         /// FIXME: Talking points: give user option of saving changes on exit (allow them to change file name/location)
         ///        also have temporary storage in case of system failure (not sure how to manage that though)
-        /// TODO: check if owl file selected (prompt or select default?) [if default, make a oopy/ask where to save copy]
+        /// TODO: check if owl file selected (prompt or select default?) [if default, make a copy/ask where to save copy]
         if (this.owl_handler == null) {
             /// FIXME: this doesn't work!!!
             try {
@@ -411,7 +422,7 @@ public class MainFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
