@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 import za.ac.uct.cs.controllers.Questions;
 import za.ac.uct.cs.controllers.OWLHandler;
@@ -70,6 +71,11 @@ public class MainFrame extends javax.swing.JFrame {
         jMenuRemoveEntity = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         lblOwlFile.setText("OWL File: ");
 
@@ -244,7 +250,7 @@ public class MainFrame extends javax.swing.JFrame {
                 | FileNotFoundException 
                 | AssertionError ex
             )
-            { return; } // add error popup: Could not load owl file...
+            { return; } /// TODO: add error popup: Could not load owl file...
             txtOwlFilePath.setText(this.owl_handler.filepath());
             System.out.println("Ontology File: " + this.owl_handler.filename());
             System.out.println("From path: " + this.owl_handler.filepath());
@@ -258,6 +264,9 @@ public class MainFrame extends javax.swing.JFrame {
     private void btnEntityNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntityNameActionPerformed
         String text = txtEntityName.getText();
         if (txtEntityName.isEnabled() && !text.equals("")){
+            /* Future: 
+                give user the option to choose IRI fragment
+            */
             this.setCurrentEntityName(text);
             this.resetSelection();
         }
@@ -314,6 +323,16 @@ public class MainFrame extends javax.swing.JFrame {
         btnEntityNameActionPerformed(evt);
     }//GEN-LAST:event_txtEntityNameActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if (this.owl_handler == null) { return; }
+        if (this.owl_handler.filepath().equals(this.default_owl_file_path)){
+            // i.e. we are using the default BFO owl file
+            /// TODO: ask user to confirm new location of file, then move owl file. In future, always request confirmation of changes and location.
+        }
+        this.saveOWLFile();
+    }//GEN-LAST:event_formWindowClosing
+
     private void setCurrentEntityName(String entity_name){
         current_entity_name = entity_name;
         txtEntityName.setEnabled(false);
@@ -363,8 +382,6 @@ public class MainFrame extends javax.swing.JFrame {
     
     private void importAxiomIntoOWLFile(){
         ///TODO: documentation
-        /// FIXME: Talking points: give user option of saving changes on exit (allow them to change file name/location)
-        ///        also have temporary storage in case of system failure (not sure how to manage that though)
         /// TODO: check if owl file selected (prompt or select default?) [if default, make a copy/ask where to save copy]
         if (this.owl_handler == null) {
             /// FIXME: this doesn't work!!!
@@ -379,7 +396,6 @@ public class MainFrame extends javax.swing.JFrame {
         String message = String.format(
             "Are you sure you want to import \"%s\" into %s",
             txtAxiom.getText(),
-            // owl file/ontology name (ps can i get ontology name from owl file: iri maybe?)
             this.owl_handler.filename()
         );
         
@@ -388,12 +404,39 @@ public class MainFrame extends javax.swing.JFrame {
         );
         
         if (accept_import == JOptionPane.YES_OPTION){
-            /// TODO
             System.out.println("Importing \""+txtAxiom.getText()+"\" into "+this.owl_handler.filename());
             String axiom_superclass = this.question_controller.getAxiom();
-            boolean success = this.owl_handler.addClassAxiom(this.current_entity_name, "SubClassOf", axiom_superclass);
+            boolean success = this.owl_handler.addClassAxiom(
+                this.current_entity_name.toLowerCase(), 
+                "SubClassOf", 
+                axiom_superclass.toLowerCase()
+            );
+            if (success){
+                /* Future: 
+                    save temporary copy and give user option of saving changes 
+                    on exit (allow them to change file name/location)
+                */
+                this.saveOWLFile();
+            }
             System.out.println((success)? "success" : "failure");
         }
+    }
+    
+    private void saveOWLFile(){
+        if (this.owl_handler == null){ return; }
+        // allow 2 retries
+        int retry = 0;
+        while (retry < 3){
+            try {
+                this.owl_handler.saveToFile();
+                return;
+            }
+            catch(OWLOntologyStorageException ex){
+                ++retry;
+            }
+        }
+        // if it gets here all retries failed
+        /// TODO: error popup: unable to save owl file
     }
             
     /**

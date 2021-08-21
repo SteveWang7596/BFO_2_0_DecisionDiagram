@@ -55,6 +55,9 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -172,10 +175,13 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblEntityName">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Entity Name:"/>
+            <Property name="text" type="java.lang.String" value="Entity Label:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtEntityName">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtEntityNameActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnEntityName">
           <Properties>
