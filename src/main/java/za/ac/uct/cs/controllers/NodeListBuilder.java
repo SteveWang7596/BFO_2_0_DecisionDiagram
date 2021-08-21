@@ -157,10 +157,4 @@ public class NodeListBuilder{
         public static final String ID       = "id";
         public static final String TRAGET   = "target";
     }
-
-    // Main method to tests, remove when done
-    public static void main(String args[]) 
-    {
-        buildNodeList(null);
-    }
 }

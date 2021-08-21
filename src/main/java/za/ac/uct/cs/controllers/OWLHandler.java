@@ -157,8 +157,9 @@ public class OWLHandler{
             manager.setDefaultPrefix(manager.getPrefix(BFO_PREFIX_NAME));
         }
     }
-    
+
     // insert axiom method
+    //[**At the moment we only going to use subclass axioms, so I recommend keep this for later]__steve
     public boolean addClassAxiom(String OWLClassName, String axiomType, String otherOWLClassName){
     	/* TODO: documentation; returns true if successful and false otherwise. */
     	IRI ontology_iri = ontology.getOntologyID().getOntologyIRI().get();
@@ -178,7 +179,32 @@ public class OWLHandler{
         // some other axiom type was provided
         return false;
     }
-    
+
+    //[**I don't think this is necessary, the existing method already does this]
+    //[**I'll add the subclass check to the other method.]
+    //[**Actually I'm probably just being stubborn. (debating with myself which approach is better)]__chiadika
+    public boolean addSubClassOfAxiom(String superclass, String subclass){
+        // Class validation
+        if (!LABEL_TO_IRI_FRAGMENT.containsKey(superclass.toLowerCase()))
+            // Superclass should be an BFO entity
+            return false;
+        if (LABEL_TO_IRI_FRAGMENT.containsKey(subclass.toLowerCase()))
+            // Subclass should not be an BFO entity
+            return false;
+
+        OWLClass owl_superclass = getOrCreateClass(getIRIFromLabel(superclass));
+        OWLClass owl_subclass = getOrCreateClass(getIRIFromLabel(subclass));
+
+        if (owl_superclass == null || owl_subclass == null)
+            // Unable to create OWLClasses
+            return false;
+
+        OWLAxiom subClassOfAxiom = datafactory.getOWLSubClassOfAxiom(owl_subclass, owl_superclass);
+        System.out.println("Adding Axiom: " + subClassOfAxiom.toString());
+        return (ontology.addAxiom(subClassOfAxiom) == ChangeApplied.SUCCESSFULLY);
+
+    }
+
     private IRI getIRIFromLabel(String label){
         return this.datafactory.getOWLClass(
             LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label), 
@@ -193,10 +219,11 @@ public class OWLHandler{
             i.e. you cannot search for 'Entity' rather 'BFO_0000001'
         */
         if (this.ontology.containsClassInSignature(classIRI)){//isDeclared(classIRI)){
+            System.out.println("IRI: " + classIRI + " found in the ontology."); // TODO: REMOVE
             return this.datafactory.getOWLClass(classIRI);
         }
         /* long way:
-            if class is not found, check through labels 
+            if class is not found, check through labels [TODO]
             (maybe only do this if IRI differs from BFO 2.0 IRI)
         */
         String label = classIRI.getFragment();
@@ -252,8 +279,8 @@ public class OWLHandler{
         OWLOntologyManager manager = this.ontology.getOWLOntologyManager();
         manager.removeOntology(this.ontology);
     }
-    
-    class LabelExtractor 
+
+    class LabelExtractor
     implements OWLObjectVisitorEx<String>, OWLAnnotationObjectVisitorEx<String>{    
         @Override
         public String visit(OWLAnnotation annotation) {
