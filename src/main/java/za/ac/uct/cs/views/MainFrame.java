@@ -7,6 +7,8 @@ package za.ac.uct.cs.views;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URL;
+import java.nio.file.Paths;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -21,7 +23,6 @@ import za.ac.uct.cs.controllers.OWLHandler;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    // private File owl_file; // TODO: REMOVE
     private String default_owl_file_path;
     private String current_entity_name;
     private Questions question_controller;
@@ -31,8 +32,7 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form MainFrame
      */
     public MainFrame() {
-        // this.owl_file = null; // TODO: REMOVE
-        this.default_owl_file_path = "src/main/resources/za/ac/uct/cs/owl/BFO_2_0.owl";
+        this.default_owl_file_path =  "/za/ac/uct/cs/owl/BF0_2_0.owl"; // "C:\\Users\\Eek Ok 0987\\Documents\\Mein__\\BFO_2_0_Decision_Diagram\\src\\main\\resources\\za\\ac\\uct\\cs\\owl\\BF0_2_0.owl"; // "src/main/resources/za/ac/uct/cs/owl/BFO_2_0.owl";
         this.question_controller = new Questions();
         initDecisionProcess();
         initComponents();
@@ -272,8 +272,11 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEntityNameActionPerformed
 
+    /** 
+     * Triggered when 'previous question button is clicked; this method restores 
+     * previous question and axiom text 
+     */
     private void btnPrevQuestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevQuestionActionPerformed
-        // TODO add your handling code here:
         try {
             this.question_controller.goToPreviousQuestion();
             this.resetSelection();
@@ -288,12 +291,14 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPrevQuestionActionPerformed
 
     private void btnInsertAxiomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertAxiomActionPerformed
-        // TODO add your handling code here:
         this.importAxiomIntoOWLFile();
     }//GEN-LAST:event_btnInsertAxiomActionPerformed
 
+    /**
+     * Triggered when 'next question button is clicked; this method processes 
+     * the answer selection and adjusts the display accordingly
+     */
     private void btnNextQuestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextQuestionActionPerformed
-        // TODO add your handling code here:
         String selected_answer = cbQuestionOptions.getSelectedItem().toString();
         System.out.println("Selected answer: " + selected_answer);
         this.question_controller.processAnswer(selected_answer);
@@ -301,13 +306,11 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNextQuestionActionPerformed
 
     private void jMenuRestartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRestartActionPerformed
-        // TODO add your handling code here:
         this.initDecisionProcess();
         this.resetSelection();
     }//GEN-LAST:event_jMenuRestartActionPerformed
 
     private void jMenuRemoveEntityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRemoveEntityActionPerformed
-        // TODO add your handling code here:
         this.enableSelection(false);
         // clear all questions, selection options and axioms
         txtAreaQuestion.setText("");
@@ -324,7 +327,6 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEntityNameActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
         if (this.owl_handler == null) { return; }
         if (this.owl_handler.filepath().equals(this.default_owl_file_path)){
             // i.e. we are using the default BFO owl file
@@ -384,9 +386,11 @@ public class MainFrame extends javax.swing.JFrame {
         ///TODO: documentation
         /// TODO: check if owl file selected (prompt or select default?) [if default, make a copy/ask where to save copy]
         if (this.owl_handler == null) {
-            /// FIXME: this doesn't work!!!
             try {
-                this.owl_handler = new OWLHandler(this.default_owl_file_path);
+                URL bfo_2_0_file = getClass().getResource(this.default_owl_file_path);
+                String bfo_2_0_path = Paths.get(bfo_2_0_file.toURI()).toAbsolutePath().toString();
+                this.owl_handler = new OWLHandler(bfo_2_0_path);
+                /// TODO: update import file text field
             }
             catch (Exception ex){
                 /// TODO
