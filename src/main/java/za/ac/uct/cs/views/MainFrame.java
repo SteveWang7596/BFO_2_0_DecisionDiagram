@@ -390,7 +390,8 @@ public class MainFrame extends javax.swing.JFrame {
                 URL bfo_2_0_file = getClass().getResource(this.default_owl_file_path);
                 String bfo_2_0_path = Paths.get(bfo_2_0_file.toURI()).toAbsolutePath().toString();
                 this.owl_handler = new OWLHandler(bfo_2_0_path);
-                /// TODO: update import file text field
+                // update import file text field
+                txtOwlFilePath.setText(bfo_2_0_path);
             }
             catch (Exception ex){
                 /// TODO
