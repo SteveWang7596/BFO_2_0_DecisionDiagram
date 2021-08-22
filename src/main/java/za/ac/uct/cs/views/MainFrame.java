@@ -32,7 +32,7 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form MainFrame
      */
     public MainFrame() {
-        this.default_owl_file_path =  "/za/ac/uct/cs/owl/BF0_2_0.owl"; // "C:\\Users\\Eek Ok 0987\\Documents\\Mein__\\BFO_2_0_Decision_Diagram\\src\\main\\resources\\za\\ac\\uct\\cs\\owl\\BF0_2_0.owl"; // "src/main/resources/za/ac/uct/cs/owl/BFO_2_0.owl";
+        this.default_owl_file_path =  "/za/ac/uct/cs/owl/BF0_2_0.owl";
         this.question_controller = new Questions();
         initDecisionProcess();
         initComponents();
