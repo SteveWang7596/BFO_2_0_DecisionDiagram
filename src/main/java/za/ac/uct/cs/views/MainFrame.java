@@ -5,6 +5,7 @@
  */
 package za.ac.uct.cs.views;
 
+import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -28,6 +29,8 @@ public class MainFrame extends javax.swing.JFrame {
     private String current_entity_name;
     private Questions question_controller;
     private OWLHandler owl_handler;
+    
+    private static String NO_SELECTION = "None of the above";
     
     /**
      * Creates new form MainFrame
@@ -103,7 +106,11 @@ public class MainFrame extends javax.swing.JFrame {
         txtAreaQuestion.setRows(5);
         spQuestion.setViewportView(txtAreaQuestion);
 
-        cbQuestionOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbQuestionOptions.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbQuestionOptionsItemStateChanged(evt);
+            }
+        });
 
         btnPrevQuestion.setText("< Previous Question");
         btnPrevQuestion.addActionListener(new java.awt.event.ActionListener() {
@@ -336,6 +343,17 @@ public class MainFrame extends javax.swing.JFrame {
         this.saveOWLFile();
     }//GEN-LAST:event_formWindowClosing
 
+    private void cbQuestionOptionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbQuestionOptionsItemStateChanged
+        // Disable Next Question button if No Selection option is chosen
+        if (evt.getStateChange() == ItemEvent.SELECTED){
+            Object item = evt.getItem();
+            btnNextQuestion.setEnabled(
+                !item.toString().equals(NO_SELECTION) &&
+                !this.question_controller.isFinalQuestion()
+            );
+       }
+    }//GEN-LAST:event_cbQuestionOptionsItemStateChanged
+
     private void setupFileChooser(){
         FileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         FileChooser.setFileFilter(new FileFilter(){
@@ -381,6 +399,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         String[] options = this.question_controller.getAnswerOptions();
         for (String option: options) { cbQuestionOptions.addItem(option); }
+        cbQuestionOptions.addItem(NO_SELECTION); // Add No Selection option
         cbQuestionOptions.setEnabled(true);
         // update axiom and unfreeze axiom import button
         String axiom = String.format(
