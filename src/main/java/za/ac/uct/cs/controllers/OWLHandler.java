@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.AddImport;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
@@ -14,6 +15,7 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLImportsDeclaration;
 import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -21,6 +23,8 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.model.parameters.ChangeApplied;
+import org.semanticweb.owlapi.model.parameters.Imports;
+import org.semanticweb.owlapi.util.SimpleIRIMapper;
 
 public class OWLHandler{
     private String filename;
@@ -138,9 +142,32 @@ public class OWLHandler{
         this.ontology.saveOntology();
     }
     
-    private void importBFOClassesAndAxioms(){
-        /// TODO
-        // ontology merger?
+    private void importBFOClassesAndAxioms() throws OWLOntologyCreationException {
+        /// TODO: documentation
+        IRI ontology_iri = ontology.getOntologyID().getOntologyIRI().get();
+        if (ontology_iri.getIRIString().equals(BFO_2_0_IRI)) { return; }
+        // Check for BFO 2.0 import
+        OWLImportsDeclaration bfo_import = this.datafactory.getOWLImportsDeclaration(
+            IRI.create(BFO_2_0_IRI)
+        );
+        boolean bfo_imported = this.ontology.importsDeclarations().anyMatch((t) -> {
+            System.out.println("Imported ontology: " + t.getIRI().getIRIString()); // TODO: REMOVE
+            return t.equals(bfo_import);
+        });
+        if (bfo_imported){
+            System.out.println("BFO 2.0 already imported."); // TODO: REMOVE
+            return;
+        }
+        // If not already imported, import BFO 2.0
+        bfo_imported = (
+            this.ontology.applyChange(new AddImport(this.ontology, bfo_import)) == ChangeApplied.SUCCESSFULLY
+        );
+        if (!bfo_imported){
+            throw new OWLOntologyCreationException(
+                String.format("Could not import BFO 2.0 into %s ontology", ontology_iri.getFragment())
+            );
+        }
+        System.out.println("BFO 2.0 successfully imported."); // TODO: REMOVE
     }
     
     public String filename(){
@@ -162,8 +189,7 @@ public class OWLHandler{
     //[**At the moment we only going to use subclass axioms, so I recommend keep this for later]__steve
     public boolean addClassAxiom(String OWLClassName, String axiomType, String otherOWLClassName){
     	/* TODO: documentation; returns true if successful and false otherwise. */
-    	IRI ontology_iri = ontology.getOntologyID().getOntologyIRI().get();
-        IRI class_iri = this.getIRIFromLabel(OWLClassName);
+    	IRI class_iri = this.getIRIFromLabel(OWLClassName);
         IRI other_iri = this.getIRIFromLabel(otherOWLClassName);
         // check if class is in Ontology
         OWLClass entityOne = this.getOrCreateClass(class_iri);
@@ -218,7 +244,7 @@ public class OWLHandler{
             it works but does not consider labels 
             i.e. you cannot search for 'Entity' rather 'BFO_0000001'
         */
-        if (this.ontology.containsClassInSignature(classIRI)){//isDeclared(classIRI)){
+        if (this.ontology.containsClassInSignature(classIRI, Imports.INCLUDED)){
             System.out.println("IRI: " + classIRI + " found in the ontology."); // TODO: REMOVE
             return this.datafactory.getOWLClass(classIRI);
         }
