@@ -11,6 +11,7 @@ import java.net.URL;
 import java.nio.file.Paths;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
@@ -36,6 +37,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.question_controller = new Questions();
         initDecisionProcess();
         initComponents();
+        setupFileChooser();
         enableSelection(false);
     }
 
@@ -236,7 +238,6 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ImportOWLFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportOWLFileActionPerformed
-        FileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         int result = FileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION)
         {
@@ -335,6 +336,26 @@ public class MainFrame extends javax.swing.JFrame {
         this.saveOWLFile();
     }//GEN-LAST:event_formWindowClosing
 
+    private void setupFileChooser(){
+        FileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        FileChooser.setFileFilter(new FileFilter(){
+            @Override
+            public boolean accept(File currFileOrDir){
+                // allows files with the .owl extension and directories.
+                boolean visible = (
+                    currFileOrDir.isDirectory() || 
+                    currFileOrDir.getName().endsWith(".owl")
+                );
+                return visible;
+            }
+            
+            @Override
+            public String getDescription(){
+                return ".owl";
+            }
+        });
+    }
+    
     private void setCurrentEntityName(String entity_name){
         current_entity_name = entity_name;
         txtEntityName.setEnabled(false);
