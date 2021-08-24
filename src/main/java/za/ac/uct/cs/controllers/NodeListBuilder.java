@@ -1,8 +1,12 @@
 /// TODO: DOCUMENTATION
 package za.ac.uct.cs.controllers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,13 +27,13 @@ import za.ac.uct.cs.models.DecisionNode;
 
 public class NodeListBuilder{
         
-    private static final String BFO_2_0_DEFAULT_PATH = "src/main/resources/za/ac/uct/cs/xml/BFO_2_0_decision_tree.xml";
-
-    public static Map<String, DecisionNode> buildNodeList(){
+    private static final String BFO_2_0_DEFAULT_PATH = "BFO_2_0_decision_tree.xml";
+    
+    public Map<String, DecisionNode> buildNodeList(){
         return buildNodeList(null);
     }
     
-    public static Map<String, DecisionNode> buildNodeList(String XML_file_path){
+    public Map<String, DecisionNode> buildNodeList(String XML_file_path){
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
         try {
@@ -39,10 +43,16 @@ public class NodeListBuilder{
             // Parse XML file
             DocumentBuilder db = dbf.newDocumentBuilder();
             
+           
             // Determine XML file path
-            String file_path = XML_file_path == null ? BFO_2_0_DEFAULT_PATH : XML_file_path;
+            File file;
+            
+            if (XML_file_path == null)
+                file = getFile();
+            else
+                file = new File(XML_file_path);
 
-            Document doc = db.parse(new File(file_path));
+            Document doc = db.parse(file);
 
             // Normalise XML file elements
             doc.getDocumentElement().normalize();
@@ -149,6 +159,13 @@ public class NodeListBuilder{
         System.out.println(sb.toString());
     }
     
+    private File getFile(){
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream is = classLoader.getResourceAsStream(BFO_2_0_DEFAULT_PATH);
+        printInputStream(is);
+        return new File(classLoader.getResource(BFO_2_0_DEFAULT_PATH).getFile());
+    }
+    
     public class XMLTag{
         public static final String BRANCH   = "branch";
         public static final String CONTENT  = "content";
@@ -156,5 +173,22 @@ public class NodeListBuilder{
         public static final String CONCEPT  = "concept";
         public static final String ID       = "id";
         public static final String TRAGET   = "target";
+    }
+    
+    private static void printInputStream(InputStream is) {
+
+        try (InputStreamReader streamReader =
+                    new InputStreamReader(is, StandardCharsets.UTF_8);
+             BufferedReader reader = new BufferedReader(streamReader)) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
