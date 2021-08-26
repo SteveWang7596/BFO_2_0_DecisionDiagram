@@ -23,7 +23,7 @@ import za.ac.uct.cs.models.DecisionNode;
 
 public class NodeListBuilder{
         
-    private static final String BFO_2_0_DEFAULT_PATH = "src/main/resources/za/ac/uct/cs/xml/BFO_2_0_decision_tree.xml";
+    private static final String BFO_2_0_DEFAULT_PATH = "za/ac/uct/cs/xml/BFO_2_0_decision_tree.xml";
 
     public static Map<String, DecisionNode> buildNodeList(){
         return buildNodeList(null);
@@ -40,9 +40,17 @@ public class NodeListBuilder{
             DocumentBuilder db = dbf.newDocumentBuilder();
             
             // Determine XML file path
-            String file_path = XML_file_path == null ? BFO_2_0_DEFAULT_PATH : XML_file_path;
-
-            Document doc = db.parse(new File(file_path));
+            Document doc;
+            if (XML_file_path == null){
+                doc = db.parse(
+                    FileUtils.getFileFromResourcePackage(BFO_2_0_DEFAULT_PATH)
+                );
+            }
+            else {
+                File xml_file = null;
+                xml_file = new File(XML_file_path);
+                doc = db.parse(xml_file);
+            }
 
             // Normalise XML file elements
             doc.getDocumentElement().normalize();

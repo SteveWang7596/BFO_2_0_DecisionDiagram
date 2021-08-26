@@ -8,13 +8,13 @@ package za.ac.uct.cs.views;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URL;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import za.ac.uct.cs.controllers.FileUtils;
 
 import za.ac.uct.cs.controllers.Questions;
 import za.ac.uct.cs.controllers.OWLHandler;
@@ -36,7 +36,7 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form MainFrame
      */
     public MainFrame() {
-        this.default_owl_file_path =  "/za/ac/uct/cs/owl/BF0_2_0.owl";
+        this.default_owl_file_path = "za/ac/uct/cs/owl/BF0_2_0.owl";
         this.question_controller = new Questions();
         initDecisionProcess();
         initComponents();
@@ -427,9 +427,13 @@ public class MainFrame extends javax.swing.JFrame {
         /// TODO: check if owl file selected (prompt or select default?) [if default, make a copy/ask where to save copy]
         if (this.owl_handler == null) {
             try {
-                URL bfo_2_0_file = getClass().getResource(this.default_owl_file_path);
-                String bfo_2_0_path = Paths.get(bfo_2_0_file.toURI()).toAbsolutePath().toString();
-                this.owl_handler = new OWLHandler(bfo_2_0_path);
+                InputStream bfo_2_0_filestream = FileUtils.getFileFromResourcePackage(this.default_owl_file_path);
+                String new_directory = String.format("%s%s", System.getProperty("user.home"), File.separator);
+                String bfo_2_0_path = new_directory + "bfo_2_0__modified.owl";
+                
+                System.out.println("\nOWL path: " + bfo_2_0_path + "\n");
+                
+                this.owl_handler = new OWLHandler(bfo_2_0_filestream, bfo_2_0_path);
                 // update import file text field
                 txtOwlFilePath.setText(bfo_2_0_path);
             }

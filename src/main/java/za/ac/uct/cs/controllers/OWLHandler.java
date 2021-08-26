@@ -3,9 +3,11 @@ package za.ac.uct.cs.controllers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.io.FileDocumentTarget;
 import org.semanticweb.owlapi.model.AddImport;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
@@ -32,7 +34,7 @@ public class OWLHandler{
     private OWLOntology ontology;
     private OWLDataFactory datafactory;
     private static String BFO_PREFIX_NAME = "obo:";
-    private static String BFO_2_0_IRI = "http://purl.obolibrary.org/obo/bfo.owl";
+    private static String BFO_IRI = "http://purl.obolibrary.org/obo/bfo.owl";
     private static Map<String, String> LABEL_TO_IRI_FRAGMENT;
     private static boolean STATIC_VARIABLES_INITIALISED = false;
 
@@ -135,20 +137,46 @@ public class OWLHandler{
         this.setDefaultPrefix();
         this.importBFOClassesAndAxioms();
     }
+    
+    public OWLHandler(InputStream filestream, String filepath) 
+    throws NullPointerException, OWLOntologyCreationException, AssertionError 
+    {
+        /// TODO: documentation
+        init();
+        if (filestream == null) { 
+            throw new NullPointerException("No file input stream provided."); 
+        }
+        if (filepath == null) { 
+            throw new NullPointerException("No file path provided."); 
+        }
+
+        this.filepath = filepath;
+        this.filename = FileUtils.getFilename(filepath);
+
+        OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+
+        this.ontology = manager.loadOntologyFromOntologyDocument(filestream);
+        this.datafactory = manager.getOWLDataFactory();
+
+        if (ontology == null) { throw new AssertionError("Ontology cannot be null"); }
+        this.setDefaultPrefix();
+        this.importBFOClassesAndAxioms();
+    }
 
     // save ontology method
     public void saveToFile() throws OWLOntologyStorageException {
         /// TODO: change ontology IRI and location if equal to BFO 2.0 IRI
-        this.ontology.saveOntology();
+        // set document target using filepath and use that when saving
+        FileDocumentTarget fd = new FileDocumentTarget(new File(this.filepath));
+        this.ontology.saveOntology(fd);
     }
     
     private void importBFOClassesAndAxioms() throws OWLOntologyCreationException {
         /// TODO: documentation
         IRI ontology_iri = ontology.getOntologyID().getOntologyIRI().get();
-        if (ontology_iri.getIRIString().equals(BFO_2_0_IRI)) { return; }
+        if (ontology_iri.getIRIString().equals(BFO_IRI)) { return; }
         // Check for BFO 2.0 import
-        OWLImportsDeclaration bfo_import = this.datafactory.getOWLImportsDeclaration(
-            IRI.create(BFO_2_0_IRI)
+        OWLImportsDeclaration bfo_import = this.datafactory.getOWLImportsDeclaration(IRI.create(BFO_IRI)
         );
         boolean bfo_imported = this.ontology.importsDeclarations().anyMatch((t) -> {
             System.out.println("Imported ontology: " + t.getIRI().getIRIString()); // TODO: REMOVE
