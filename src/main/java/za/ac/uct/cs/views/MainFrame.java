@@ -9,6 +9,8 @@ import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
@@ -260,12 +262,21 @@ public class MainFrame extends javax.swing.JFrame {
             )
             { return; } /// TODO: add error popup: Could not load owl file...
             txtOwlFilePath.setText(this.owl_handler.filepath());
-            System.out.println("Ontology File: " + this.owl_handler.filename());
-            System.out.println("From path: " + this.owl_handler.filepath());
+            Logger.getLogger(MainFrame.class.getName()).log(
+                Level.INFO,
+                String.format(
+                    "Ontology File: %s\nFrom path: %s", 
+                    this.owl_handler.filename(), 
+                    this.owl_handler.filepath()
+                )
+            );
         }
         else
         {
-            System.out.println("User cancelled owl file selection process.");
+            Logger.getLogger(MainFrame.class.getName()).log(
+                Level.FINE,
+                "User cancelled owl file selection process."
+            );
         }
     }//GEN-LAST:event_ImportOWLFileActionPerformed
 
@@ -304,11 +315,14 @@ public class MainFrame extends javax.swing.JFrame {
 
     /**
      * Triggered when 'next question button is clicked; this method processes 
-     * the answer selection and adjusts the display accordingly
+     * the answer selection and adjusts the display accordingly.
      */
     private void btnNextQuestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextQuestionActionPerformed
         String selected_answer = cbQuestionOptions.getSelectedItem().toString();
-        System.out.println("Selected answer: " + selected_answer);
+        Logger.getLogger(MainFrame.class.getName()).log(
+            Level.INFO,
+            String.format("Selected answer: %s", selected_answer)
+        );
         this.question_controller.processAnswer(selected_answer);
         this.resetSelection();
     }//GEN-LAST:event_btnNextQuestionActionPerformed
@@ -377,7 +391,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void setCurrentEntityName(String entity_name){
         current_entity_name = entity_name;
         txtEntityName.setEnabled(false);
-        System.out.println("Current entity name: " + current_entity_name);
+        Logger.getLogger(MainFrame.class.getName()).log(
+            Level.INFO,
+            String.format("Current entity name: %s", current_entity_name)
+        );
     }
     
     private void enableSelection(boolean enable){
@@ -424,14 +441,25 @@ public class MainFrame extends javax.swing.JFrame {
     
     private void importAxiomIntoOWLFile(){
         ///TODO: documentation
-        /// TODO: check if owl file selected (prompt or select default?) [if default, make a copy/ask where to save copy]
+        // check if an owl file is selected (if not, select default and make a 
+        // copy in the home directory) 
+        /* Future (2 options):
+            (1) prompt user for name and location (path) of existing owl file.
+            (2) if default, ask user for the path to save the new owl file.
+        */
         if (this.owl_handler == null) {
             try {
-                InputStream bfo_2_0_filestream = FileUtils.getFileFromResourcePackage(this.default_owl_file_path);
-                String new_directory = String.format("%s%s", System.getProperty("user.home"), File.separator);
-                String bfo_2_0_path = new_directory + "bfo_2_0__modified.owl";
+                InputStream bfo_2_0_filestream 
+                    = FileUtils.getFileFromResourcePackage(this.default_owl_file_path);
                 
-                System.out.println("\nOWL path: " + bfo_2_0_path + "\n");
+                String bfo_2_0_path = String.format("%s%s%s", 
+                    System.getProperty("user.home"), File.separator, "bfo_2_0__modified.owl"
+                );
+                
+                Logger.getLogger(MainFrame.class.getName()).log(
+                    Level.INFO,
+                    String.format("OWL path: %s\n", bfo_2_0_path)
+                );
                 
                 this.owl_handler = new OWLHandler(bfo_2_0_filestream, bfo_2_0_path);
                 // update import file text field
@@ -453,7 +481,14 @@ public class MainFrame extends javax.swing.JFrame {
         );
         
         if (accept_import == JOptionPane.YES_OPTION){
-            System.out.println("Importing \""+txtAxiom.getText()+"\" into "+this.owl_handler.filename());
+            Logger.getLogger(MainFrame.class.getName()).log(
+                Level.INFO,
+                String.format(
+                    "Importing \"%s\" into %s",
+                    txtAxiom.getText(),
+                    this.owl_handler.filename()
+                )
+            );
             String axiom_superclass = this.question_controller.getAxiom();
             boolean success = this.owl_handler.addClassAxiom(
                 this.current_entity_name.toLowerCase(), 

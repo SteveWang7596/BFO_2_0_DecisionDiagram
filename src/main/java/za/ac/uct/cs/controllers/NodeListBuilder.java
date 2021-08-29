@@ -79,7 +79,10 @@ public class NodeListBuilder{
             if (node.getNodeType() == Node.ELEMENT_NODE){
                 Element node_element = (Element) node;
                 String node_id = getBranchId(node_element);
-                System.out.println("initialising node : " + node_id);
+                Logger.getLogger(NodeListBuilder.class.getName()).log(
+                    Level.CONFIG,
+                    String.format("initialising node : %s", node_id)
+                );
                 DecisionNode decisionNode = new DecisionNode(node_id, getDecision(node_element));
                 NodeMap.put(node_id, decisionNode);
             }
@@ -151,10 +154,13 @@ public class NodeListBuilder{
         
         for(String key: mapping.keySet()){
             sb.append("\n")
-                    .append(mapping.get(key).toString());
+              .append(mapping.get(key).toString());
         }
         
-        System.out.println(sb.toString());
+        Logger.getLogger(NodeListBuilder.class.getName()).log(
+            Level.CONFIG,
+            sb.toString()
+        );
     }
     
     public class XMLTag{

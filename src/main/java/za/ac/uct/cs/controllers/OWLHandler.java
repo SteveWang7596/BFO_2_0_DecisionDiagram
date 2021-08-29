@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.FileDocumentTarget;
 import org.semanticweb.owlapi.model.AddImport;
@@ -41,7 +43,10 @@ public class OWLHandler{
     static void init(){
     	// initialise LABEL_TO_IRI_FRAGMENT
         if (STATIC_VARIABLES_INITIALISED) { return; }
-        System.out.println("Executing static block"); // TODO: REMOVE
+        Logger.getLogger(OWLHandler.class.getName()).log(
+            Level.CONFIG,
+            "Executing static block."
+        );
         LABEL_TO_IRI_FRAGMENT = new HashMap<>();
     	// Entity: BFO_0000001
         LABEL_TO_IRI_FRAGMENT.put("entity", "BFO_0000001");
@@ -115,12 +120,24 @@ public class OWLHandler{
         LABEL_TO_IRI_FRAGMENT.put("history", "BFO_0000182");
 
         STATIC_VARIABLES_INITIALISED = true;
+        Logger.getLogger(OWLHandler.class.getName()).log(
+            Level.CONFIG,
+            "Static block execution complete."
+        );
     }
 
+    /**
+     * Constructor that creates an OWLHandler object for an owl ontology 
+     * document stored at the provided system path.
+     * @param filepath  path to where the owl ontology document is saved.
+     * @throws NullPointerException
+     * @throws OWLOntologyCreationException
+     * @throws FileNotFoundException
+     * @throws AssertionError 
+     */
     public OWLHandler(String filepath) 
     throws NullPointerException, OWLOntologyCreationException, FileNotFoundException, AssertionError 
     {
-        /// TODO: documentation
         init();
         if (filepath == null) { throw new NullPointerException("No file path provided."); }
 
@@ -138,10 +155,18 @@ public class OWLHandler{
         this.importBFOClassesAndAxioms();
     }
     
+    /**
+     * Constructor that creates an OWLHandler object from an InputStream of an 
+     * existing owl ontology document.
+     * @param filestream   an InputStream of an existing owl ontology document.
+     * @param filepath  path that the modified owl ontology should be saved at.
+     * @throws NullPointerException
+     * @throws OWLOntologyCreationException
+     * @throws AssertionError 
+     */
     public OWLHandler(InputStream filestream, String filepath) 
     throws NullPointerException, OWLOntologyCreationException, AssertionError 
     {
-        /// TODO: documentation
         init();
         if (filestream == null) { 
             throw new NullPointerException("No file input stream provided."); 
@@ -179,11 +204,14 @@ public class OWLHandler{
         OWLImportsDeclaration bfo_import = this.datafactory.getOWLImportsDeclaration(IRI.create(BFO_IRI)
         );
         boolean bfo_imported = this.ontology.importsDeclarations().anyMatch((t) -> {
-            System.out.println("Imported ontology: " + t.getIRI().getIRIString()); // TODO: REMOVE
+            Logger.getLogger(OWLHandler.class.getName()).log(
+                Level.INFO,
+                String.format("Imported ontology: %s", t.getIRI().getIRIString())
+            );
             return t.equals(bfo_import);
         });
         if (bfo_imported){
-            System.out.println("BFO 2.0 already imported."); // TODO: REMOVE
+            Logger.getLogger(OWLHandler.class.getName()).log(Level.INFO, "BFO 2.0 already imported.");
             return;
         }
         // If not already imported, import BFO 2.0
@@ -195,7 +223,7 @@ public class OWLHandler{
                 String.format("Could not import BFO 2.0 into %s ontology", ontology_iri.getFragment())
             );
         }
-        System.out.println("BFO 2.0 successfully imported."); // TODO: REMOVE
+        Logger.getLogger(OWLHandler.class.getName()).log(Level.INFO, "BFO 2.0 successfully imported.");
     }
     
     public String filename(){
@@ -255,7 +283,10 @@ public class OWLHandler{
             return false;
 
         OWLAxiom subClassOfAxiom = datafactory.getOWLSubClassOfAxiom(owl_subclass, owl_superclass);
-        System.out.println("Adding Axiom: " + subClassOfAxiom.toString());
+        Logger.getLogger(OWLHandler.class.getName()).log(
+            Level.INFO,
+            String.format("Adding Axiom: %s", subClassOfAxiom.toString())
+        );
         return (ontology.addAxiom(subClassOfAxiom) == ChangeApplied.SUCCESSFULLY);
     }
 
@@ -273,7 +304,10 @@ public class OWLHandler{
             i.e. you cannot search for 'Entity' rather 'BFO_0000001'
         */
         if (this.ontology.containsClassInSignature(classIRI, Imports.INCLUDED)){
-            System.out.println("IRI: " + classIRI + " found in the ontology."); // TODO: REMOVE
+            Logger.getLogger(OWLHandler.class.getName()).log(
+                Level.INFO,
+                String.format("IRI: %s found in the ontology.", classIRI)
+            );
             return this.datafactory.getOWLClass(classIRI);
         }
         /* long way:
@@ -298,8 +332,11 @@ public class OWLHandler{
                 return owlCls;
             }
         }
-        /// TODO: create owl class declaration and return class
-        System.out.println("Creating new class: " + label); // TODO: REMOVE
+        // create owl class declaration and return class
+        Logger.getLogger(OWLHandler.class.getName()).log(
+            Level.INFO,
+            String.format("Creating new class: %s", label)
+        );
         OWLClass owlCls = this.datafactory.getOWLClass(classIRI);
         OWLAxiom[] axioms = new OWLAxiom[] {
             // add label annotation
@@ -317,6 +354,10 @@ public class OWLHandler{
         return owlCls;
     }
     
+    /**
+     * Returns an array of string representations (names) of all owl axiom types.
+     * @return the names of owl axiom types
+     */
     public static String[] getAxiomTypes(){
         int size = AxiomType.AXIOM_TYPES.size();
         String[] axiomTypes = new String[size];
@@ -328,6 +369,10 @@ public class OWLHandler{
         return axiomTypes;
     }
     
+    /**
+     * This method is provided for use for memory management. 
+     * It is only to be called once, to remove the loaded ontology from memory.
+     */
     public void clean(){
         OWLOntologyManager manager = this.ontology.getOWLOntologyManager();
         manager.removeOntology(this.ontology);
