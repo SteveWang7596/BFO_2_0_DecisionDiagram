@@ -272,9 +272,20 @@ public class OWLHandler{
     	/* TODO: documentation; returns true if successful and false otherwise. */
     	IRI class_iri = this.getIRIFromLabel(OWLClassName);
         IRI other_iri = this.getIRIFromLabel(otherOWLClassName);
-        // check if class is in Ontology
-        OWLClass entityOne = this.getOrCreateClass(class_iri);
-        OWLClass entityTwo = this.getOrCreateClass(other_iri);
+        return this.addClassAxiom(class_iri, axiomType, other_iri);
+    }
+
+    /**
+     * This method adds a binary axiom to the loaded ontology.
+     * @param OWLClassIRI  IRI of an owl class 
+     * @param axiomType  name of the binary axiom
+     * @param otherOWLClassIRI  IRI of an owl class
+     * @return  A Boolean value of True if successful and False otherwise.
+     */
+    public boolean addClassAxiom(IRI OWLClassIRI, String axiomType, IRI otherOWLClassIRI){
+    	// check if class is in Ontology
+        OWLClass entityOne = this.getOrCreateClass(OWLClassIRI);
+        OWLClass entityTwo = this.getOrCreateClass(otherOWLClassIRI);
         if (entityOne == null || entityTwo == null) { return false; }           // unable to locate or create class
         // check if relation is in Ontology
         // if not, add axiom to Ontology
@@ -313,6 +324,22 @@ public class OWLHandler{
             String.format("Adding Axiom: %s", subClassOfAxiom.toString())
         );
         return (ontology.addAxiom(subClassOfAxiom) == ChangeApplied.SUCCESSFULLY);
+    }
+
+    public IRI getBFOClassIRI(String label){
+    	/// TODO
+        return this.datafactory.getOWLClass(
+            LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label), 
+            BFO_2_0.getFormat().asPrefixOWLDocumentFormat()
+        ).getIRI();
+    }
+
+    public IRI getDomainIRI(String label){
+    	/// TODO
+    	return this.datafactory.getOWLClass(
+            LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label), 
+            this.ontology.getFormat().asPrefixOWLDocumentFormat()
+        ).getIRI();
     }
 
     private IRI getIRIFromLabel(String label){

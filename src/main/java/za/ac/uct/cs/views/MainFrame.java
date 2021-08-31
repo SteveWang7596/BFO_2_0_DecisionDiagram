@@ -493,9 +493,9 @@ public class MainFrame extends javax.swing.JFrame {
             );
             String axiom_superclass = this.question_controller.getAxiom();
             boolean success = this.owl_handler.addClassAxiom(
-                this.current_entity_name.toLowerCase(), 
+                this.owl_handler.getDomainIRI(this.current_entity_name), 
                 "SubClassOf", 
-                axiom_superclass.toLowerCase()
+                this.owl_handler.getBFOClassIRI(axiom_superclass.toLowerCase())
             );
             if (success){
                 /* Future: 
