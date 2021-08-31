@@ -103,7 +103,7 @@
 		<concept>Generically Dependent Continuant</concept>
 	</branch>
 	<branch id="1.1.2.2">
-		<concept>Specifically Dependent Continual</concept>
+		<concept>Specifically Dependent Continuant</concept>
 		<content>Does [] require some further process to be realised?</content>
 		<fork target="1.1.2.2.1">Yes</fork>
 		<fork target="1.1.2.2.2">No</fork>
