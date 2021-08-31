@@ -38,7 +38,7 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form MainFrame
      */
     public MainFrame() {
-        this.default_owl_file_path = "za/ac/uct/cs/owl/BF0_2_0.owl";
+        this.default_owl_file_path = OWLHandler.BFO_FILEPATH;
         this.question_controller = new Questions();
         initDecisionProcess();
         initComponents();

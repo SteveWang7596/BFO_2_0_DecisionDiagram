@@ -35,10 +35,11 @@ public class OWLHandler{
     private String filepath;
     private OWLOntology ontology;
     private OWLDataFactory datafactory;
+    private static OWLOntology BFO_2_0;
     private static String BFO_PREFIX_NAME = "obo:";
-    private static String BFO_IRI = "http://purl.obolibrary.org/obo/bfo.owl";
     private static Map<String, String> LABEL_TO_IRI_FRAGMENT;
     private static boolean STATIC_VARIABLES_INITIALISED = false;
+    public final static String BFO_FILEPATH = "za/ac/uct/cs/owl/BF0_2_0.owl";
 
     static void init(){
     	// initialise LABEL_TO_IRI_FRAGMENT
@@ -119,6 +120,8 @@ public class OWLHandler{
         // History: BFO_0000182
         LABEL_TO_IRI_FRAGMENT.put("history", "BFO_0000182");
 
+        loadBFOOntology();
+        
         STATIC_VARIABLES_INITIALISED = true;
         Logger.getLogger(OWLHandler.class.getName()).log(
             Level.CONFIG,
@@ -188,6 +191,28 @@ public class OWLHandler{
         this.importBFOClassesAndAxioms();
     }
 
+    private static void loadBFOOntology() {
+        if (BFO_2_0 != null) { return; }
+        OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+        InputStream bfoFile = FileUtils.getFileFromResourcePackage(BFO_FILEPATH);
+
+        try {
+            BFO_2_0 = manager.loadOntologyFromOntologyDocument(bfoFile);
+        }
+        catch(OWLOntologyCreationException ex){
+            Logger.getLogger(OWLHandler.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+        }
+        if (BFO_2_0 == null) { 
+            throw new NullPointerException("BFO_2_0 is Null."); 
+        }
+        PrefixManager prefix = BFO_2_0.getFormat().asPrefixOWLDocumentFormat();
+        prefix.setDefaultPrefix(BFO_PREFIX_NAME);
+    }
+
     // save ontology method
     public void saveToFile() throws OWLOntologyStorageException {
         /// TODO: change ontology IRI and location if equal to BFO 2.0 IRI
@@ -198,11 +223,11 @@ public class OWLHandler{
     
     private void importBFOClassesAndAxioms() throws OWLOntologyCreationException {
         /// TODO: documentation
-        IRI ontology_iri = ontology.getOntologyID().getOntologyIRI().get();
-        if (ontology_iri.getIRIString().equals(BFO_IRI)) { return; }
+        IRI ontology_iri = this.ontology.getOntologyID().getOntologyIRI().get();
+        IRI bfo_iri = BFO_2_0.getOntologyID().getOntologyIRI().get();
+        if (ontology_iri.equals(bfo_iri)) { return; }
         // Check for BFO 2.0 import
-        OWLImportsDeclaration bfo_import = this.datafactory.getOWLImportsDeclaration(IRI.create(BFO_IRI)
-        );
+        OWLImportsDeclaration bfo_import = this.datafactory.getOWLImportsDeclaration(bfo_iri);
         boolean bfo_imported = this.ontology.importsDeclarations().anyMatch((t) -> {
             Logger.getLogger(OWLHandler.class.getName()).log(
                 Level.INFO,
