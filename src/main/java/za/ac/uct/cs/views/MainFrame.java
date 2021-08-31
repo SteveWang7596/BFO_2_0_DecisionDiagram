@@ -88,7 +88,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         txtOwlFilePath.setEditable(false);
 
-        lblEntityName.setText("Entity Label:");
+        lblEntityName.setText("Class Label:");
 
         txtEntityName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,7 +200,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         FileMenu.setText("File");
 
-        ImportOWLFile.setText("Import");
+        ImportOWLFile.setText("Load");
         ImportOWLFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ImportOWLFileActionPerformed(evt);
@@ -416,7 +416,9 @@ public class MainFrame extends javax.swing.JFrame {
         );
         String[] options = this.question_controller.getAnswerOptions();
         for (String option: options) { cbQuestionOptions.addItem(option); }
-        cbQuestionOptions.addItem(NO_SELECTION); // Add No Selection option
+        if (!this.question_controller.isFinalQuestion()) {
+            cbQuestionOptions.addItem(NO_SELECTION); // Add No Selection option
+        }
         cbQuestionOptions.setEnabled(true);
         // update axiom and unfreeze axiom import button
         String axiom = String.format(
@@ -453,7 +455,7 @@ public class MainFrame extends javax.swing.JFrame {
                     = FileUtils.getFileFromResourcePackage(this.default_owl_file_path);
                 
                 String bfo_2_0_path = String.format("%s%s%s", 
-                    System.getProperty("user.home"), File.separator, "bfo_2_0__modified.owl"
+                    System.getProperty("user.home"), File.separator, "untitled_ontology.owl"
                 );
                 
                 Logger.getLogger(MainFrame.class.getName()).log(

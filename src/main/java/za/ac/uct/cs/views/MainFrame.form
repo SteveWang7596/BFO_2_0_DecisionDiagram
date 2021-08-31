@@ -13,7 +13,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="ImportOWLFile">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Import"/>
+                <Property name="text" type="java.lang.String" value="Load"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ImportOWLFileActionPerformed"/>
@@ -175,7 +175,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblEntityName">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Entity Label:"/>
+            <Property name="text" type="java.lang.String" value="Class Label:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtEntityName">
