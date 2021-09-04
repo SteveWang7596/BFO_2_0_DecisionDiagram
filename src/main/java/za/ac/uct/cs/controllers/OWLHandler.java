@@ -199,18 +199,18 @@ public class OWLHandler{
         try {
             BFO_2_0 = manager.loadOntologyFromOntologyDocument(bfoFile);
         }
-        catch(OWLOntologyCreationException ex){
+        catch(OWLOntologyCreationException ex) {
             Logger.getLogger(OWLHandler.class.getName()).log(
                 Level.SEVERE,
                 null,
                 ex
             );
         }
-        if (BFO_2_0 == null) { 
-            throw new NullPointerException("BFO_2_0 is Null."); 
-        }
+        
+        if (BFO_2_0 == null) { throw new NullPointerException("BFO_2_0 is Null."); }
+
         PrefixManager prefix = BFO_2_0.getFormat().asPrefixOWLDocumentFormat();
-        prefix.setDefaultPrefix(BFO_PREFIX_NAME);
+        prefix.setDefaultPrefix(prefix.getPrefix(BFO_PREFIX_NAME));
     }
 
     // save ontology method
@@ -226,26 +226,37 @@ public class OWLHandler{
         IRI ontology_iri = this.ontology.getOntologyID().getOntologyIRI().get();
         IRI bfo_iri = BFO_2_0.getOntologyID().getOntologyIRI().get();
         if (ontology_iri.equals(bfo_iri)) { return; }
+        // Create imports declaration for BFO 2.0
+        OWLImportsDeclaration bfo_import = this.datafactory
+                                               .getOWLImportsDeclaration(bfo_iri);
         // Check for BFO 2.0 import
-        OWLImportsDeclaration bfo_import = this.datafactory.getOWLImportsDeclaration(bfo_iri);
-        boolean bfo_imported = this.ontology.importsDeclarations().anyMatch((t) -> {
-            Logger.getLogger(OWLHandler.class.getName()).log(
-                Level.INFO,
-                String.format("Imported ontology: %s", t.getIRI().getIRIString())
-            );
-            return t.equals(bfo_import);
-        });
+        boolean bfo_imported = this.ontology.importsDeclarations().anyMatch(
+            (t) -> {
+                Logger.getLogger(OWLHandler.class.getName()).log(
+                    Level.INFO,
+                    String.format("Imported ontology: %s", t.getIRI().getIRIString())
+                );
+                return t.equals(bfo_import);
+            }
+        );
         if (bfo_imported){
-            Logger.getLogger(OWLHandler.class.getName()).log(Level.INFO, "BFO 2.0 already imported.");
+            Logger.getLogger(OWLHandler.class.getName()).log(
+                Level.INFO, 
+                "BFO 2.0 already imported."
+            );
             return;
         }
         // If not already imported, import BFO 2.0
-        bfo_imported = (
-            this.ontology.applyChange(new AddImport(this.ontology, bfo_import)) == ChangeApplied.SUCCESSFULLY
+        this.ontology.getOWLOntologyManager().makeLoadImportRequest(bfo_import);
+        bfo_imported = (this.ontology.applyChange(
+            new AddImport(this.ontology, bfo_import)) == ChangeApplied.SUCCESSFULLY
         );
         if (!bfo_imported){
             throw new OWLOntologyCreationException(
-                String.format("Could not import BFO 2.0 into %s ontology", ontology_iri.getFragment())
+                String.format(
+                    "Could not import BFO 2.0 into %s ontology", 
+                    getIRIFragment(ontology_iri)
+                )
             );
         }
         Logger.getLogger(OWLHandler.class.getName()).log(Level.INFO, "BFO 2.0 successfully imported.");
@@ -404,6 +415,13 @@ public class OWLHandler{
             return null;
         }
         return owlCls;
+    }
+    
+    private String getIRIFragment(IRI fullIRI){
+        String no_spaces = fullIRI.getIRIString().replaceAll(" ", "-");
+        IRI no_space_iri = IRI.create(no_spaces);
+        int begin_index = no_spaces.lastIndexOf(no_space_iri.getFragment());
+        return fullIRI.getIRIString().substring(begin_index);
     }
     
     /**
