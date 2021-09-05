@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -370,10 +371,19 @@ public class OWLHandler{
     }
 
     private IRI getIRIFromLabel(String label, OWLOntology ontologie){
-        return this.datafactory.getOWLClass(
-            LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label), 
-            ontologie.getFormat().asPrefixOWLDocumentFormat()
-        ).getIRI();
+        label = LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label);
+        PrefixManager prefix = ontologie.getFormat().asPrefixOWLDocumentFormat();
+        Set<String> prefixNames = prefix.getPrefixNames();
+        
+        for (String prefixName : prefixNames){
+            IRI tempIRI = IRI.create(prefix.getPrefix(prefixName), label);
+            if (ontologie.containsClassInSignature(tempIRI, Imports.INCLUDED)){
+                return tempIRI;
+            }
+        }
+        /// TODO? maybe check for label in ontologie and return associated class iri if it exists.
+        // otherwise use default prefix to create class IRI
+        return this.datafactory.getOWLClass(label, prefix).getIRI();
     }
     
     private OWLClass getOrCreateClass(IRI classIRI){
