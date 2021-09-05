@@ -262,10 +262,18 @@ public class OWLHandler{
         Logger.getLogger(OWLHandler.class.getName()).log(Level.INFO, "BFO 2.0 successfully imported.");
     }
     
+    /**
+     * Gets the file name that the loaded ontology will be saved to. 
+     * @return  the name of the file where the loaded ontology will be saved.
+     */
     public String filename(){
     	return this.filename;
     }
     
+    /**
+     * Gets the full file path that the loaded ontology will be saved to. 
+     * @return  the path where the loaded ontology will be saved.
+     */
     public String filepath(){
         return this.filepath;
     }
@@ -277,12 +285,17 @@ public class OWLHandler{
         }
     }
 
-    // insert axiom method
-    //[**At the moment we only going to use subclass axioms, so I recommend keep this for later]__steve
+    /**
+     * This method adds a binary axiom to the loaded ontology.
+     * @param OWLClassName  name of an owl class 
+     * @param axiomType  name of the binary axiom
+     * @param otherOWLClassName  name of an owl class
+     * @return  A Boolean value of True if successful and False otherwise.
+     */
     public boolean addClassAxiom(String OWLClassName, String axiomType, String otherOWLClassName){
     	/* TODO: documentation; returns true if successful and false otherwise. */
-    	IRI class_iri = this.getIRIFromLabel(OWLClassName);
-        IRI other_iri = this.getIRIFromLabel(otherOWLClassName);
+    	IRI class_iri = this.getIRIFromLabel(OWLClassName, this.ontology);
+        IRI other_iri = this.getIRIFromLabel(otherOWLClassName, this.ontology);
         return this.addClassAxiom(class_iri, axiomType, other_iri);
     }
 
@@ -322,8 +335,8 @@ public class OWLHandler{
             // Subclass should not be an BFO entity
             return false;
 
-        OWLClass owl_superclass = getOrCreateClass(getIRIFromLabel(superclass));
-        OWLClass owl_subclass = getOrCreateClass(getIRIFromLabel(subclass));
+        OWLClass owl_superclass = getOrCreateClass(getIRIFromLabel(superclass, BFO_2_0));
+        OWLClass owl_subclass = getOrCreateClass(getIRIFromLabel(subclass, this.ontology));
 
         if (owl_superclass == null || owl_subclass == null)
             // Unable to create OWLClasses
@@ -337,26 +350,29 @@ public class OWLHandler{
         return (ontology.addAxiom(subClassOfAxiom) == ChangeApplied.SUCCESSFULLY);
     }
 
+    /**
+     * Creates an IRI for the given class label using the BFO 2.0 prefix format.
+     * @param label  the name of the OWL class.
+     * @return  the class IRI for the given class label.
+     */
     public IRI getBFOClassIRI(String label){
-    	/// TODO
-        return this.datafactory.getOWLClass(
-            LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label), 
-            BFO_2_0.getFormat().asPrefixOWLDocumentFormat()
-        ).getIRI();
+        return this.getIRIFromLabel(label, OWLHandler.BFO_2_0);
     }
 
+    /**
+     * Creates an IRI for the given class label using the prefix format of the 
+     * loaded ontology.
+     * @param label  the name of the OWL class.
+     * @return  the class IRI for the given class label.
+     */
     public IRI getDomainIRI(String label){
-    	/// TODO
-    	return this.datafactory.getOWLClass(
-            LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label), 
-            this.ontology.getFormat().asPrefixOWLDocumentFormat()
-        ).getIRI();
+    	return this.getIRIFromLabel(label, this.ontology);
     }
 
-    private IRI getIRIFromLabel(String label){
+    private IRI getIRIFromLabel(String label, OWLOntology ontologie){
         return this.datafactory.getOWLClass(
             LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label), 
-            this.ontology.getFormat().asPrefixOWLDocumentFormat()
+            ontologie.getFormat().asPrefixOWLDocumentFormat()
         ).getIRI();
     }
     
