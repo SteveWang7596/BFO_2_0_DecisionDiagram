@@ -37,89 +37,16 @@ public class OWLHandler{
     private OWLDataFactory datafactory;
     private static OWLOntology BFO_2_0;
     private static String BFO_PREFIX_NAME = "obo:";
-    private static Map<String, String> LABEL_TO_IRI_FRAGMENT;
     private static boolean STATIC_VARIABLES_INITIALISED = false;
     public final static String BFO_FILEPATH = "za/ac/uct/cs/owl/BF0_2_0.owl";
 
     static void init(){
-    	// initialise LABEL_TO_IRI_FRAGMENT
-        if (STATIC_VARIABLES_INITIALISED) { return; }
+    	if (STATIC_VARIABLES_INITIALISED) { return; }
         Logger.getLogger(OWLHandler.class.getName()).log(
             Level.CONFIG,
             "Executing static block."
         );
-        LABEL_TO_IRI_FRAGMENT = new HashMap<>();
-    	// Entity: BFO_0000001
-        LABEL_TO_IRI_FRAGMENT.put("entity", "BFO_0000001");
-        // Continuant: BFO_0000002
-        LABEL_TO_IRI_FRAGMENT.put("continuant", "BFO_0000002");
-        // Occurrent: BFO_0000003
-        LABEL_TO_IRI_FRAGMENT.put("occurrent", "BFO_0000003");
-        // Independent Continuant: BFO_0000004
-        LABEL_TO_IRI_FRAGMENT.put("independent continuant", "BFO_0000004");
-        // Spatial Region: BFO_0000006
-        LABEL_TO_IRI_FRAGMENT.put("spatial region", "BFO_0000006");
-        // Temporal Region: BFO_0000008
-        LABEL_TO_IRI_FRAGMENT.put("temporal region", "BFO_0000008");
-        // Two-dimensional Spatial Region: BFO_0000009
-        LABEL_TO_IRI_FRAGMENT.put("two-dimensional spatial region", "BFO_0000009");
-        // Spatio-Temporal Region: BFO_0000011
-        LABEL_TO_IRI_FRAGMENT.put("spatiotemporal region", "BFO_0000011");
-        // Process: BFO_0000015
-        LABEL_TO_IRI_FRAGMENT.put("process", "BFO_0000015");
-        // Disposition: BFO_0000016
-        LABEL_TO_IRI_FRAGMENT.put("disposition", "BFO_0000016");
-        // Realizable Entity: BFO_0000017
-        LABEL_TO_IRI_FRAGMENT.put("realizable entity", "BFO_0000017");
-        // Zero-dimensional Spatial Region: BFO_0000018
-        LABEL_TO_IRI_FRAGMENT.put("zero-dimensional spatial region", "BFO_0000018");
-        // Quality: BFO_0000019
-        LABEL_TO_IRI_FRAGMENT.put("quality", "BFO_0000019");
-        // Specifically Dependent Continuant: BFO_0000020
-        LABEL_TO_IRI_FRAGMENT.put("specifically dependent continuant", "BFO_0000020");
-        // Role: BFO_0000023
-        LABEL_TO_IRI_FRAGMENT.put("role", "BFO_0000023");
-        // Fiat: BFO_0000024
-        LABEL_TO_IRI_FRAGMENT.put("fiat object", "BFO_0000024");
-        // One-dimensional Spatial Region: BFO_0000026
-        LABEL_TO_IRI_FRAGMENT.put("one-dimensional spatial region", "BFO_0000026");
-        // Object Aggregate: BFO_0000027
-        LABEL_TO_IRI_FRAGMENT.put("object aggregate", "BFO_0000027");
-        // Three-dimensional Spatial Region: BFO_0000028
-        LABEL_TO_IRI_FRAGMENT.put("three-dimensional spatial region", "BFO_0000028");
-        // Site: BFO_0000029
-        LABEL_TO_IRI_FRAGMENT.put("site", "BFO_0000029");
-        // Object: BFO_0000030
-        LABEL_TO_IRI_FRAGMENT.put("object", "BFO_0000030");
-        // Generically Dependent Continuant: BFO_0000031
-        LABEL_TO_IRI_FRAGMENT.put("generically dependent continuant", "BFO_0000031");
-        // Function: BFO_0000034
-        LABEL_TO_IRI_FRAGMENT.put("function", "BFO_0000034");
-        // Process Boundary: BFO_0000035
-        LABEL_TO_IRI_FRAGMENT.put("process boundary", "BFO_0000035");
-        // One-dimensional Temporal Region: BFO_0000038
-        LABEL_TO_IRI_FRAGMENT.put("one-dimensional temporal region", "BFO_0000038");
-        // Material Entity: BFO_0000040
-        LABEL_TO_IRI_FRAGMENT.put("material entity", "BFO_0000040");
-        // Continuant Fiat Boundary: BFO_0000140
-        LABEL_TO_IRI_FRAGMENT.put("continuant fiat boundary", "BFO_0000140");
-        // Immaterial Entity: BFO_0000141
-        LABEL_TO_IRI_FRAGMENT.put("immaterial entity", "BFO_0000141");
-        // One-dimensional Continuant Fiat Entity: BFO_0000142
-        LABEL_TO_IRI_FRAGMENT.put("one-dimensional continuant fiat boundary", "BFO_0000142");
-        // Process Profile: BFO_0000144
-        LABEL_TO_IRI_FRAGMENT.put("process profile", "BFO_0000144");
-        // Relational Quality: BFO_0000145
-        LABEL_TO_IRI_FRAGMENT.put("relational quality", "BFO_0000145");
-        // Two-dimensional Continuant Fiat Boundary: BFO_0000146
-        LABEL_TO_IRI_FRAGMENT.put("two-dimensional continuant fiat boundary", "BFO_0000146");
-        // Zero-dimensional Continuant Fiat Boundary: BFO_0000147
-        LABEL_TO_IRI_FRAGMENT.put("zero-dimensional continuant fiat boundary", "BFO_0000147");
-        // Zero-dimensional Temporal Region: BFO_0000148
-        LABEL_TO_IRI_FRAGMENT.put("zero-dimensional temporal region", "BFO_0000148");
-        // History: BFO_0000182
-        LABEL_TO_IRI_FRAGMENT.put("history", "BFO_0000182");
-
+        
         loadBFOOntology();
         
         STATIC_VARIABLES_INITIALISED = true;
@@ -322,41 +249,12 @@ public class OWLHandler{
         return false;
     }
 
-    //[**I don't think this is necessary, the existing method already does this]
-    //[**I'll add the subclass check to the other method.]
-    //[**Actually I'm probably just being stubborn. (debating with myself which approach is better)]
-    //[**After much deliberation, my conclusion is that this is too much program logic for this class]__chiadika
-    public boolean addSubClassOfAxiom(String superclass, String subclass){
-        // Class validation
-        if (!LABEL_TO_IRI_FRAGMENT.containsKey(superclass))
-            // Superclass should be an BFO entity
-            return false;
-        if (LABEL_TO_IRI_FRAGMENT.containsKey(subclass))
-            // Subclass should not be an BFO entity
-            return false;
-
-        OWLClass owl_superclass = getOrCreateClass(getIRIFromLabel(superclass, BFO_2_0));
-        OWLClass owl_subclass = getOrCreateClass(getIRIFromLabel(subclass, this.ontology));
-
-        if (owl_superclass == null || owl_subclass == null)
-            // Unable to create OWLClasses
-            return false;
-
-        OWLAxiom subClassOfAxiom = datafactory.getOWLSubClassOfAxiom(owl_subclass, owl_superclass);
-        Logger.getLogger(OWLHandler.class.getName()).log(
-            Level.INFO,
-            String.format("Adding Axiom: %s", subClassOfAxiom.toString())
-        );
-        return (ontology.addAxiom(subClassOfAxiom) == ChangeApplied.SUCCESSFULLY);
-    }
-
     /**
      * Creates an IRI for the given class label using the BFO 2.0 prefix format.
      * @param label  the name of the OWL class.
      * @return  the class IRI for the given class label.
      */
     public IRI getBFOClassIRI(String label){
-        label = LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label);
         return this.getIRIFromLabel(label, OWLHandler.BFO_2_0);
     }
 
@@ -371,28 +269,17 @@ public class OWLHandler{
     }
 
     private IRI getIRIFromLabel(final String label, OWLOntology ontologie){
-        PrefixManager prefix = ontologie.getFormat().asPrefixOWLDocumentFormat();
-        Set<String> prefixNames = prefix.getPrefixNames();
-        
-        for (String prefixName : prefixNames){
-            IRI tempIRI = IRI.create(prefix.getPrefix(prefixName), label);
-            if (ontologie.containsClassInSignature(tempIRI, Imports.INCLUDED)){
-                return tempIRI;
-            }
-        }
-        
-        // Search for label in ontologie. Return associated class iri if it exists.
+        // Search for label in ontologie and return associated class iri if 
+        // it exists.
         LabelExtractor extractor = new LabelExtractor();
         
         for (OWLClass owlCls : ontologie.getClassesInSignature()){
-            // System.out.println("\n"+owlCls.toString()); // TODO: REMOVE
             boolean labelMatch = ontologie.annotationAssertionAxioms(
                 owlCls.getIRI(), 
                 Imports.INCLUDED
             ).anyMatch(t -> {
                 String result = t.getAnnotation().accept(extractor);
                 if (result == null) { return false; }
-                // System.out.println("\t-"+result); // TODO: REMOVE
                 return result.equalsIgnoreCase(label);
             });
             
@@ -400,6 +287,7 @@ public class OWLHandler{
         }
         
         // Otherwise use default prefix to create class IRI
+        PrefixManager prefix = ontologie.getFormat().asPrefixOWLDocumentFormat();
         return this.datafactory.getOWLClass(label, prefix).getIRI();
     }
     
@@ -474,7 +362,7 @@ public class OWLHandler{
     }
 
     class LabelExtractor
-    implements OWLObjectVisitorEx<String>, OWLAnnotationObjectVisitorEx<String>{    
+    implements OWLObjectVisitorEx<String>, OWLAnnotationObjectVisitorEx<String>{
         @Override
         public String visit(OWLAnnotation annotation) {
             if (annotation.getValue() instanceof OWLLiteral) {
