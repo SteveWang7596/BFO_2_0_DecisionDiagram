@@ -269,7 +269,17 @@ public class OWLHandler{
     }
 
     private IRI getIRIFromLabel(final String label, OWLOntology ontologie){
-        // Search for label in ontologie and return associated class iri if 
+        // Check if ontologie uses simple prefix-label iri for the class
+        PrefixManager prefix = ontologie.getFormat().asPrefixOWLDocumentFormat();
+        Set<String> prefixNames = prefix.getPrefixNames();
+        
+        for (String prefixName : prefixNames){
+            IRI tempIRI = IRI.create(prefix.getPrefix(prefixName), label);
+            if (ontologie.containsClassInSignature(tempIRI, Imports.INCLUDED))
+            { return tempIRI; }
+        }
+
+        // Search for label in ontologie and return associated class iri if
         // it exists.
         LabelExtractor extractor = new LabelExtractor();
         
@@ -287,7 +297,6 @@ public class OWLHandler{
         }
         
         // Otherwise use default prefix to create class IRI
-        PrefixManager prefix = ontologie.getFormat().asPrefixOWLDocumentFormat();
         return this.datafactory.getOWLClass(label, prefix).getIRI();
     }
     
