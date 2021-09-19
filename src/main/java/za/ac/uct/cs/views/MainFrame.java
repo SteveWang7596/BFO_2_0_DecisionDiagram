@@ -548,7 +548,14 @@ public class MainFrame extends javax.swing.JFrame {
                 txtOwlFilePath.setText(bfo_2_0_path);
             }
             catch (Exception ex){
-                /// TODO
+                Logger.getGlobal().warning(
+                    String.format("%s\nUnable to create %s%s%s",
+                        ex,
+                        System.getProperty("user.home"), 
+                        File.separator, 
+                        "untitled_ontology.owl"
+                    )
+                );
             }
         }
         // confirm insert and owl file
@@ -602,7 +609,19 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
         // if it gets here all retries failed
-        /// TODO: error popup: unable to save owl file
+        Logger.getLogger(MainFrame.class.getName()).log(
+            Level.SEVERE, "Could not save OWL file."
+        );
+        // notify the user
+        String error_msg = String.format(
+            "An error occurred while saving %s",
+            this.owl_handler.filename()
+        );
+        JOptionPane.showMessageDialog(
+            this, error_msg, 
+            "Could not save OWL file", 
+            JOptionPane.ERROR_MESSAGE
+        );
     }
             
     /**
