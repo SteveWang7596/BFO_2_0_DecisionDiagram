@@ -56,7 +56,16 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         FileChooser = new javax.swing.JFileChooser();
-        HelpText = new javax.swing.JInternalFrame();
+        ExtraWindow = new javax.swing.JFrame();
+        tabHelp = new javax.swing.JTabbedPane();
+        pnlAbout = new javax.swing.JPanel();
+        lblAboutHeading = new javax.swing.JLabel();
+        spAbout = new javax.swing.JScrollPane();
+        txpAboutBody = new javax.swing.JTextPane();
+        pnlHelp = new javax.swing.JPanel();
+        lblHelpHeading = new javax.swing.JLabel();
+        spHelp = new javax.swing.JScrollPane();
+        txpHelpBody = new javax.swing.JTextPane();
         jPanel1 = new javax.swing.JPanel();
         lblOwlFile = new javax.swing.JLabel();
         txtOwlFilePath = new javax.swing.JTextField();
@@ -71,7 +80,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnNextQuestion = new javax.swing.JButton();
         btnInsertAxiom = new javax.swing.JButton();
         txtAxiom = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnBrowse = new javax.swing.JButton();
         MenuBar = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         ImportOWLFile = new javax.swing.JMenuItem();
@@ -82,30 +91,127 @@ public class MainFrame extends javax.swing.JFrame {
         jMenuStartPage = new javax.swing.JMenuItem();
         jMenuAbout = new javax.swing.JMenuItem();
 
-        HelpText.setVisible(true);
+        ExtraWindow.setTitle("Help");
+        ExtraWindow.setBounds(new java.awt.Rectangle(0, 0, 402, 321));
+        ExtraWindow.setLocation(new java.awt.Point(30, 40));
+        ExtraWindow.setLocationByPlatform(true);
+        ExtraWindow.setMinimumSize(new java.awt.Dimension(422, 327));
+        ExtraWindow.setName("Help — About"); // NOI18N
+        ExtraWindow.setPreferredSize(new java.awt.Dimension(538, 390));
+        ExtraWindow.setSize(new java.awt.Dimension(538, 390));
 
-        javax.swing.GroupLayout HelpTextLayout = new javax.swing.GroupLayout(HelpText.getContentPane());
-        HelpText.getContentPane().setLayout(HelpTextLayout);
-        HelpTextLayout.setHorizontalGroup(
-            HelpTextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 364, Short.MAX_VALUE)
+        tabHelp.setBackground(new java.awt.Color(255, 255, 255));
+        tabHelp.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabHelp.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        tabHelp.setOpaque(true);
+
+        pnlAbout.setBackground(new java.awt.Color(255, 255, 255));
+        pnlAbout.setForeground(new java.awt.Color(51, 51, 51));
+
+        lblAboutHeading.setFont(new java.awt.Font("Serif", 1, 24)); // NOI18N
+        lblAboutHeading.setText(" About");
+        lblAboutHeading.setOpaque(true);
+
+        spAbout.setBackground(new java.awt.Color(255, 255, 255));
+        spAbout.setBorder(null);
+        spAbout.setForeground(new java.awt.Color(51, 51, 51));
+
+        txpAboutBody.setBorder(null);
+        txpAboutBody.setContentType("text/html"); // NOI18N
+        txpAboutBody.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        txpAboutBody.setForeground(new java.awt.Color(51, 51, 51));
+        txpAboutBody.setCaretColor(new java.awt.Color(51, 51, 51));
+        txpAboutBody.setSelectionColor(new java.awt.Color(51, 51, 51));
+        spAbout.setViewportView(txpAboutBody);
+        txpAboutBody.getAccessibleContext().setAccessibleDescription("text/html");
+
+        javax.swing.GroupLayout pnlAboutLayout = new javax.swing.GroupLayout(pnlAbout);
+        pnlAbout.setLayout(pnlAboutLayout);
+        pnlAboutLayout.setHorizontalGroup(
+            pnlAboutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAboutLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(pnlAboutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblAboutHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10))
         );
-        HelpTextLayout.setVerticalGroup(
-            HelpTextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 192, Short.MAX_VALUE)
+
+        pnlAboutLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lblAboutHeading, spAbout});
+
+        pnlAboutLayout.setVerticalGroup(
+            pnlAboutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAboutLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(lblAboutHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(spAbout, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
         );
+
+        tabHelp.addTab("About", pnlAbout);
+
+        pnlHelp.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblHelpHeading.setFont(new java.awt.Font("Serif", 1, 24)); // NOI18N
+        lblHelpHeading.setText("  Help");
+        lblHelpHeading.setOpaque(true);
+
+        spHelp.setBackground(new java.awt.Color(255, 255, 255));
+        spHelp.setBorder(null);
+        spHelp.setForeground(new java.awt.Color(51, 51, 51));
+
+        txpHelpBody.setBorder(null);
+        txpHelpBody.setContentType("text/html"); // NOI18N
+        txpHelpBody.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        txpHelpBody.setForeground(new java.awt.Color(51, 51, 51));
+        txpHelpBody.setText("<html><div align=\"justify\"><h2>How To Guide</h2><h3>Loading an OWL ontology document</h3><p>There are three ways to load an OWL ontology document. The first is a browse button next to the \"OWL File\" display box which opens a file picker that allows you to select which OWL ontology document you want to load. The other two options do the same thing. <br>Option 1: On the menu bar, select <b>File > Load OWL file</b>.<br>Option 2: The keyboard shortcut \"<i>Ctrl+Shift+L</i>\".</p><br><h3>Navigating the Decision Tree</h3><p>To begin, enter the name of the class into the text box labelled \"Class label\" and click on \"Confirm\". Once the class name has been confirmed the first question will appear in the text area directly below and the \"Next Question\" button as well as the dropdown will be enabled. Select the appropriate response to the question from the dropdown selection. If none of the available options apply, you may choose to use the axiom at the bottom of the screen or return to previous questions. After selecting a response from the dropdown selection, click on \"Next Question\" to continue the classification process. Note that you may click on \"Previous Question\" at any point during the process to undo the latest selection.</p><br><h3>Importing an Axiom</h3><p>Once you have found the BFO classification that best describes the chosen class, you may choose to import the subclass axiom into an OWL ontology document. To do so, click on \"Import Axiom\". If you have not yet loaded an OWL file, the option to create an untitled ontology BFO-merged document will be presented to you. If you decline that option, you may choose to load your local ontology document and click on \"Import Axiom\" again.</p><br><h3>Restarting the Decision Tree</h3><p>To restart the classification process for the current OWL class, from the menu bar, select <b>Edit > Restart</b>. Alternatively, use the keyboard shortcut \"<i>Ctrl+R</i>\".</p><br><h3>Choosing a Different Class</h3><p>To change the OWL class, from the menu bar, select <b>Edit > Change Class</b> or use the keyboard shortcut \"<i>Ctrl+Shift+R</i>\", and the decision process will be reset with the option to change the class name. Once you have changed the class name, click on \"Confirm\" to begin.</p><br></div>");
+        txpHelpBody.setCaretColor(new java.awt.Color(51, 51, 51));
+        txpHelpBody.setSelectionColor(new java.awt.Color(51, 51, 51));
+        spHelp.setViewportView(txpHelpBody);
+
+        javax.swing.GroupLayout pnlHelpLayout = new javax.swing.GroupLayout(pnlHelp);
+        pnlHelp.setLayout(pnlHelpLayout);
+        pnlHelpLayout.setHorizontalGroup(
+            pnlHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlHelpLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(pnlHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(lblHelpHeading, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
+        );
+        pnlHelpLayout.setVerticalGroup(
+            pnlHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlHelpLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(lblHelpHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(spHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
+        );
+
+        tabHelp.addTab("Start Page", pnlHelp);
+
+        ExtraWindow.getContentPane().add(tabHelp, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setForeground(new java.awt.Color(51, 51, 51));
+
+        lblOwlFile.setForeground(new java.awt.Color(51, 51, 51));
         lblOwlFile.setText(" OWL File: ");
 
         txtOwlFilePath.setEditable(false);
 
+        lblEntityName.setForeground(new java.awt.Color(51, 51, 51));
         lblEntityName.setText(" Class Label:");
 
         txtEntityName.setPreferredSize(new java.awt.Dimension(7, 23));
@@ -115,6 +221,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        btnEntityName.setBackground(new java.awt.Color(191, 191, 191));
         btnEntityName.setText("Confirm");
         btnEntityName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,6 +240,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        btnPrevQuestion.setBackground(new java.awt.Color(191, 191, 191));
         btnPrevQuestion.setText("< Previous Question");
         btnPrevQuestion.setMaximumSize(new java.awt.Dimension(113, 23));
         btnPrevQuestion.setMinimumSize(new java.awt.Dimension(113, 23));
@@ -142,6 +250,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        btnNextQuestion.setBackground(new java.awt.Color(191, 191, 191));
         btnNextQuestion.setText("Next Question >");
         btnNextQuestion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,6 +258,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        btnInsertAxiom.setBackground(new java.awt.Color(191, 191, 191));
         btnInsertAxiom.setText("Insert Axiom");
         btnInsertAxiom.setMaximumSize(new java.awt.Dimension(113, 23));
         btnInsertAxiom.setMinimumSize(new java.awt.Dimension(113, 23));
@@ -162,10 +272,11 @@ public class MainFrame extends javax.swing.JFrame {
         txtAxiom.setEditable(false);
         txtAxiom.setPreferredSize(new java.awt.Dimension(7, 23));
 
-        jButton1.setText("Browse");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnBrowse.setBackground(new java.awt.Color(191, 191, 191));
+        btnBrowse.setText("Browse");
+        btnBrowse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnBrowseActionPerformed(evt);
             }
         });
 
@@ -175,23 +286,9 @@ public class MainFrame extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(88, 88, 88)
-                .addComponent(txtOwlFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtOwlFilePath)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(btnPrevQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnNextQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(cbQuestionOptions, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(spQuestion)
+                .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10))
             .addComponent(jSeparator1)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -206,8 +303,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(lblEntityName, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtEntityName, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(txtEntityName, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -215,6 +311,20 @@ public class MainFrame extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(btnEntityName, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnPrevQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnNextQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(cbQuestionOptions, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(spQuestion)
                         .addGap(10, 10, 10))))
         );
 
@@ -230,7 +340,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtOwlFilePath, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(btnBrowse, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -238,7 +348,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(txtEntityName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnEntityName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(spQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbQuestionOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -255,10 +365,10 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addComponent(lblOwlFile)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGap(22, 22, 22))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, txtOwlFilePath});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnBrowse, txtOwlFilePath});
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnEntityName, txtEntityName});
 
@@ -266,7 +376,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         FileMenu.setText("File");
 
-        ImportOWLFile.setText("Load .OWL file");
+        ImportOWLFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        ImportOWLFile.setText("Load .owl file");
         ImportOWLFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ImportOWLFileActionPerformed(evt);
@@ -278,6 +389,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenuEdit.setText("Edit");
 
+        jMenuRemoveEntity.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuRemoveEntity.setText("Change Class");
         jMenuRemoveEntity.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -286,6 +398,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jMenuEdit.add(jMenuRemoveEntity);
 
+        jMenuRestart.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuRestart.setText("Restart");
         jMenuRestart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -298,10 +411,22 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenuHelp.setText("Help");
 
+        jMenuStartPage.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.ALT_DOWN_MASK));
         jMenuStartPage.setText("Start Page");
+        jMenuStartPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuStartPageActionPerformed(evt);
+            }
+        });
         jMenuHelp.add(jMenuStartPage);
 
-        jMenuAbout.setText("Help");
+        jMenuAbout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        jMenuAbout.setText("About");
+        jMenuAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuAboutActionPerformed(evt);
+            }
+        });
         jMenuHelp.add(jMenuAbout);
 
         MenuBar.add(jMenuHelp);
@@ -312,11 +437,11 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -380,6 +505,7 @@ public class MainFrame extends javax.swing.JFrame {
             String error_message = ex.getMessage();
             if (error_message != null && error_message.equals("There is no previous question.")){
                 btnPrevQuestion.setEnabled(false);
+                return;
             }
             throw ex;
         }
@@ -444,9 +570,71 @@ public class MainFrame extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_cbQuestionOptionsItemStateChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
         ImportOWLFileActionPerformed(evt);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnBrowseActionPerformed
+
+    private void jMenuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAboutActionPerformed
+        // TODO add your handling code here:
+        String about_text = String.format("<html><div align=\"justify\">"
+            + "<h2>BFO 2.0 Classifier:</h2>%s</div>",
+            "what it is, and that you designed and implemented it"
+        );
+        
+        txpAboutBody.setText(about_text);
+        tabHelp.setSelectedComponent(pnlAbout);
+        ExtraWindow.setVisible(true);
+    }//GEN-LAST:event_jMenuAboutActionPerformed
+
+    private void jMenuStartPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuStartPageActionPerformed
+        // TODO add your handling code here:
+        String help_text = String.format("<html><div align=\"justify\">"
+            + "%s%s<p>%s</p><br>%s<p>%s</p><br>%s<p>%s</p><br>%s<p>%s</p><br>%s<p>%s</p><br>"
+            + "</div>",
+            "<h2>How To Guide</h2>",
+            "<h3>Loading an OWL ontology document</h3>",
+            "There are three ways to load an OWL ontology document. The first is "
+            + "a browse button next to the \"OWL File\" display box which opens "
+            + "a file picker that allows you to select which OWL ontology document "
+            + "you want to load. The other two options do the same thing. <br>"
+            + "Option 1: On the menu bar, select <b>File > Load OWL file</b>.<br>"
+            + "Option 2: The keyboard shortcut \"<i>Ctrl+Shift+L</i>\".",
+            "<h3>Navigating the Decision Tree</h3>",
+            "To begin, enter the name of the class into the text box labelled "
+            + "\"Class label\" and click on \"Confirm\". Once the class name "
+            + "has been confirmed the first question will appear in the text "
+            + "area directly below and the \"Next Question\" button as well as "
+            + "the dropdown will be enabled. Select the appropriate response to "
+            + "the question from the dropdown selection. If none of the available "
+            + "options apply, you may choose to use the axiom at the bottom of the "
+            + "screen or return to previous questions. After selecting a response "
+            + "from the dropdown selection, click on \"Next Question\" to continue "
+            + "the classification process. Note that you may click on \"Previous "
+            + "Question\" at any point during the process to undo the latest "
+            + "selection.",
+            "<h3>Importing an Axiom</h3>",
+            "Once you have found the BFO classification that best describes the "
+            + "chosen class, you may choose to import the subclass axiom into an "
+            + "OWL ontology document. To do so, click on \"Import Axiom\". If you "
+            + "have not yet loaded an OWL file, the option to create an untitled "
+            + "ontology BFO-merged document will be presented to you. If you "
+            + "decline that option, you may choose to load your local ontology "
+            + "document and click on \"Import Axiom\" again.",
+            "<h3>Restarting the Decision Tree</h3>",
+            "To restart the classification process for the current OWL class, "
+            + "from the menu bar, select <b>Edit > Restart</b>. Alternatively, "
+            + "use the keyboard shortcut \"<i>Ctrl+R</i>\".",
+            "<h3>Choosing a Different Class</h3>",
+            "To change the OWL class, from the menu bar, select <b>Edit > Change "
+            + "Class</b> or use the keyboard shortcut \"<i>Ctrl+Shift+R</i>\", "
+            + "and the decision process will be reset with the option to change "
+            + "the class name. Once you have changed the class name, click on "
+            + "\"Confirm\" to begin."
+        );
+        
+        tabHelp.setSelectedComponent(pnlHelp);
+        ExtraWindow.setVisible(true);
+    }//GEN-LAST:event_jMenuStartPageActionPerformed
 
     private void setupFileChooser(){
         FileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -660,17 +848,17 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFrame ExtraWindow;
     private javax.swing.JFileChooser FileChooser;
     private javax.swing.JMenu FileMenu;
-    private javax.swing.JInternalFrame HelpText;
     private javax.swing.JMenuItem ImportOWLFile;
     private javax.swing.JMenuBar MenuBar;
+    private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnEntityName;
     private javax.swing.JButton btnInsertAxiom;
     private javax.swing.JButton btnNextQuestion;
     private javax.swing.JButton btnPrevQuestion;
     private javax.swing.JComboBox<String> cbQuestionOptions;
-    private javax.swing.JButton jButton1;
     private javax.swing.JMenuItem jMenuAbout;
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuHelp;
@@ -679,9 +867,18 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuStartPage;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblAboutHeading;
     private javax.swing.JLabel lblEntityName;
+    private javax.swing.JLabel lblHelpHeading;
     private javax.swing.JLabel lblOwlFile;
+    private javax.swing.JPanel pnlAbout;
+    private javax.swing.JPanel pnlHelp;
+    private javax.swing.JScrollPane spAbout;
+    private javax.swing.JScrollPane spHelp;
     private javax.swing.JScrollPane spQuestion;
+    private javax.swing.JTabbedPane tabHelp;
+    private javax.swing.JTextPane txpAboutBody;
+    private javax.swing.JTextPane txpHelpBody;
     private javax.swing.JTextArea txtAreaQuestion;
     private javax.swing.JTextField txtAxiom;
     private javax.swing.JTextField txtEntityName;
