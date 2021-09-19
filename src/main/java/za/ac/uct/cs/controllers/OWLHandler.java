@@ -19,8 +19,8 @@ import org.semanticweb.owlapi.model.OWLAnnotationObjectVisitorEx;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLImportsDeclaration;
+import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -29,7 +29,6 @@ import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.model.parameters.ChangeApplied;
 import org.semanticweb.owlapi.model.parameters.Imports;
-import org.semanticweb.owlapi.util.SimpleIRIMapper;
 
 public class OWLHandler{
     private String filename;
@@ -357,6 +356,7 @@ public class OWLHandler{
      * @return  the class IRI for the given class label.
      */
     public IRI getBFOClassIRI(String label){
+        label = LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label);
         return this.getIRIFromLabel(label, OWLHandler.BFO_2_0);
     }
 
@@ -370,8 +370,7 @@ public class OWLHandler{
     	return this.getIRIFromLabel(label, this.ontology);
     }
 
-    private IRI getIRIFromLabel(String label, OWLOntology ontologie){
-        label = LABEL_TO_IRI_FRAGMENT.getOrDefault(label, label);
+    private IRI getIRIFromLabel(final String label, OWLOntology ontologie){
         PrefixManager prefix = ontologie.getFormat().asPrefixOWLDocumentFormat();
         Set<String> prefixNames = prefix.getPrefixNames();
         
@@ -381,15 +380,33 @@ public class OWLHandler{
                 return tempIRI;
             }
         }
-        /// TODO? maybe check for label in ontologie and return associated class iri if it exists.
-        // otherwise use default prefix to create class IRI
+        
+        // Search for label in ontologie. Return associated class iri if it exists.
+        LabelExtractor extractor = new LabelExtractor();
+        
+        for (OWLClass owlCls : ontologie.getClassesInSignature()){
+            // System.out.println("\n"+owlCls.toString()); // TODO: REMOVE
+            boolean labelMatch = ontologie.annotationAssertionAxioms(
+                owlCls.getIRI(), 
+                Imports.INCLUDED
+            ).anyMatch(t -> {
+                String result = t.getAnnotation().accept(extractor);
+                if (result == null) { return false; }
+                // System.out.println("\t-"+result); // TODO: REMOVE
+                return result.equalsIgnoreCase(label);
+            });
+            
+            if (labelMatch) { return owlCls.getIRI(); }
+        }
+        
+        // Otherwise use default prefix to create class IRI
         return this.datafactory.getOWLClass(label, prefix).getIRI();
     }
     
     private OWLClass getOrCreateClass(IRI classIRI){
         // adds class if not found in ontology
-        /* short way: 
-            it works but does not consider labels 
+        /* Search for class: 
+            It works but does not consider labels 
             i.e. you cannot search for 'Entity' rather 'BFO_0000001'
         */
         if (this.ontology.containsClassInSignature(classIRI, Imports.INCLUDED)){
@@ -399,28 +416,10 @@ public class OWLHandler{
             );
             return this.datafactory.getOWLClass(classIRI);
         }
-        /* long way:
-            if class is not found, check through labels [TODO]
-            (maybe only do this if IRI differs from BFO 2.0 IRI)
+        /* Class was not found:
+            Create and add class to the loaded ontology.
         */
-        String label = classIRI.getFragment();
-        LabelExtractor extractor = new LabelExtractor();
-        for (OWLClass owlCls : this.ontology.getClassesInSignature()) {
-            // System.out.println("Class: " + owlCls.getIRI().getShortForm()); // TODO: REMOVE
-            // look into "map" set of functions for annotations
-            OWLEntity entity = (OWLEntity)owlCls;
-            // Set<OWLAnnotation> annotations = entity.getAnnotations(this.ontology);
-            // for (OWLAnnotation note : annotations) {
-            //     String result = note.accept(extractor);
-            //     if (result != null) {
-            //         System.out.println(result);
-            //         // compare result with label
-            //     }
-            // }
-            if(owlCls.getIRI().equals(classIRI)){
-                return owlCls;
-            }
-        }
+        String label = getIRIFragment(classIRI);
         // create owl class declaration and return class
         Logger.getLogger(OWLHandler.class.getName()).log(
             Level.INFO,
@@ -478,7 +477,7 @@ public class OWLHandler{
     implements OWLObjectVisitorEx<String>, OWLAnnotationObjectVisitorEx<String>{    
         @Override
         public String visit(OWLAnnotation annotation) {
-            if (annotation.getProperty().isLabel()) {
+            if (annotation.getValue() instanceof OWLLiteral) {
                 return annotation.literalValue().get().getLiteral();
             }
             return null;
