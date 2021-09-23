@@ -23,7 +23,7 @@ public class OWLTester {
             // System.out.println("IRI of " + label + ": " + owl_handler.getIRIFromLabel(label));
             String parent = "entity";
             String child = "some_entity";
-            owl_handler.addSubClassOfAxiom(parent, child);
+            owl_handler.addClassAxiom(parent, "SubClassOf", child);
             owl_handler.saveToFile();
             
         } catch (NullPointerException ex) {
