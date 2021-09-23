@@ -89,9 +89,9 @@ public class Questions {
             return (axiom != null)? axiom : "";
         }
 
-        if (this.currentQuestion.getValue().getAxiom() == null){ 
-            return this.currentAxiom; 
-        }
+        // if (this.currentQuestion.getValue().getAxiom() == null){ 
+        //     return this.currentAxiom; 
+        // }
 
         DecisionNode q = this.currentQuestion;
         while(q != null){
