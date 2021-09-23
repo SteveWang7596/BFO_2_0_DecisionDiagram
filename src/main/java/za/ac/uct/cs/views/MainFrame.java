@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -31,7 +32,8 @@ public class MainFrame extends javax.swing.JFrame {
     private String current_entity_name;
     private Questions question_controller;
     private OWLHandler owl_handler;
-    
+    private Vector<String> question_history;
+
     private static String NO_SELECTION = "None of the above";
     
     /**
@@ -40,6 +42,7 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         this.default_owl_file_path = OWLHandler.BFO_FILEPATH;
         this.question_controller = new Questions();
+        this.question_history = new Vector<>();
         initDecisionProcess();
         initComponents();
         setupFileChooser();
@@ -81,6 +84,8 @@ public class MainFrame extends javax.swing.JFrame {
         btnInsertAxiom = new javax.swing.JButton();
         txtAxiom = new javax.swing.JTextField();
         btnBrowse = new javax.swing.JButton();
+        spQHistory = new javax.swing.JScrollPane();
+        txtAreaQHistory = new javax.swing.JTextArea();
         MenuBar = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         ImportOWLFile = new javax.swing.JMenuItem();
@@ -97,7 +102,6 @@ public class MainFrame extends javax.swing.JFrame {
         ExtraWindow.setLocationByPlatform(true);
         ExtraWindow.setMinimumSize(new java.awt.Dimension(422, 327));
         ExtraWindow.setName("Help — About"); // NOI18N
-        ExtraWindow.setPreferredSize(new java.awt.Dimension(538, 390));
         ExtraWindow.setSize(new java.awt.Dimension(700, 390));
 
         tabHelp.setBackground(new java.awt.Color(255, 255, 255));
@@ -203,12 +207,12 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1.setForeground(new java.awt.Color(51, 51, 51));
 
         lblOwlFile.setForeground(new java.awt.Color(51, 51, 51));
-        lblOwlFile.setText(" OWL File: ");
+        lblOwlFile.setText("  OWL File: ");
 
         txtOwlFilePath.setEditable(false);
 
         lblEntityName.setForeground(new java.awt.Color(51, 51, 51));
-        lblEntityName.setText(" Class Label:");
+        lblEntityName.setText("  Class Label:");
 
         txtEntityName.setPreferredSize(new java.awt.Dimension(7, 23));
         txtEntityName.addActionListener(new java.awt.event.ActionListener() {
@@ -228,6 +232,7 @@ public class MainFrame extends javax.swing.JFrame {
         txtAreaQuestion.setEditable(false);
         txtAreaQuestion.setColumns(20);
         txtAreaQuestion.setRows(5);
+        txtAreaQuestion.setSelectionColor(new java.awt.Color(51, 51, 51));
         spQuestion.setViewportView(txtAreaQuestion);
 
         cbQuestionOptions.addItemListener(new java.awt.event.ItemListener() {
@@ -276,91 +281,95 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        spQHistory.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Question History", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 51, 51))); // NOI18N
+
+        txtAreaQHistory.setEditable(false);
+        txtAreaQHistory.setColumns(20);
+        txtAreaQHistory.setRows(5);
+        txtAreaQHistory.setEnabled(false);
+        txtAreaQHistory.setSelectionColor(new java.awt.Color(51, 51, 51));
+        spQHistory.setViewportView(txtAreaQHistory);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(88, 88, 88)
-                .addComponent(txtOwlFilePath)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10))
-            .addComponent(jSeparator1)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(txtAxiom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txtAxiom, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblOwlFile, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 634, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spQHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 634, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbQuestionOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 634, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblEntityName, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtEntityName, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnInsertAxiom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnEntityName, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnPrevQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnNextQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)))
                         .addGap(10, 10, 10))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnPrevQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnNextQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cbQuestionOptions, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(spQuestion)
-                        .addGap(10, 10, 10))))
+                    .addComponent(lblEntityName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblOwlFile, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(567, 567, 567))
+            .addComponent(jSeparator1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnInsertAxiom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addComponent(txtOwlFilePath)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addComponent(txtEntityName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEntityName, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(10, 10, 10))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnEntityName, btnInsertAxiom, btnNextQuestion, btnPrevQuestion});
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lblEntityName, lblOwlFile});
 
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cbQuestionOptions, spQHistory, spQuestion});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblOwlFile)
+                    .addComponent(txtOwlFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBrowse))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblEntityName)
+                    .addComponent(txtEntityName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEntityName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(7, 7, 7)
+                .addComponent(spQHistory, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbQuestionOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtOwlFilePath, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBrowse, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEntityName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEntityName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbQuestionOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnNextQuestion, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnPrevQuestion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtAxiom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnInsertAxiom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(lblEntityName))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(lblOwlFile)))
+                    .addComponent(btnPrevQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNextQuestion))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtAxiom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnInsertAxiom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(22, 22, 22))
         );
 
@@ -369,6 +378,8 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnEntityName, txtEntityName});
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnInsertAxiom, btnNextQuestion, btnPrevQuestion, txtAxiom});
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblEntityName, lblOwlFile});
 
         FileMenu.setText("File");
 
@@ -495,6 +506,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void btnPrevQuestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevQuestionActionPerformed
         try {
             this.question_controller.goToPreviousQuestion();
+            int size = this.question_history.size();
+            if (size > 0){
+                this.question_history.removeElementAt(size - 1);
+            }
             this.resetSelection();
         }
         catch(NullPointerException ex){
@@ -522,6 +537,10 @@ public class MainFrame extends javax.swing.JFrame {
             String.format("Selected answer: %s", selected_answer)
         );
         this.question_controller.processAnswer(selected_answer);
+        String qHistoryItem = String.format("%s (%s)\n%4sSelected Answer:\"%s\"",
+            txtAreaQuestion.getText(), txtAxiom.getText(), " ", selected_answer
+        );
+        this.question_history.add(qHistoryItem);
         this.resetSelection();
     }//GEN-LAST:event_btnNextQuestionActionPerformed
 
@@ -533,6 +552,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void jMenuRemoveEntityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRemoveEntityActionPerformed
         this.enableSelection(false);
         // clear all questions, selection options and axioms
+        txtAreaQHistory.setText("");
         txtAreaQuestion.setText("");
         txtAxiom.setText("");
         cbQuestionOptions.removeAllItems();
@@ -576,7 +596,7 @@ public class MainFrame extends javax.swing.JFrame {
             + "<h2>BFO 2.0 Classifier:</h2>%s</div>",
             "what it is, and that you designed and implemented it"
         );
-        
+
         txpAboutBody.setText(about_text);
         tabHelp.setSelectedComponent(pnlAbout);
         ExtraWindow.setVisible(true);
@@ -627,7 +647,7 @@ public class MainFrame extends javax.swing.JFrame {
             + "the class name. Once you have changed the class name, click on "
             + "\"Confirm\" to begin."
         );
-        
+
         tabHelp.setSelectedComponent(pnlHelp);
         ExtraWindow.setVisible(true);
     }//GEN-LAST:event_jMenuStartPageActionPerformed
@@ -672,24 +692,35 @@ public class MainFrame extends javax.swing.JFrame {
     private void resetSelection(){
         // use current question to fill in question text and answer options
         cbQuestionOptions.removeAllItems();
-        txtAreaQuestion.setText(
-            this.question_controller.getQuestion().replaceAll(
-                "\\[\\]", 
-                this.current_entity_name
-            )
+        txtAreaQHistory.setText(String.join("\n", this.question_history));
+        String axiom = String.format(
+            "%s \u2291 %s",
+            this.current_entity_name,
+            this.question_controller.getAxiom()
         );
+        String question = this.question_controller.getQuestion().replaceAll(
+            "\\[\\]",
+            this.current_entity_name
+        );
+        txtAreaQuestion.setText(question);
         String[] options = this.question_controller.getAnswerOptions();
         for (String option: options) { cbQuestionOptions.addItem(option); }
         if (!this.question_controller.isFinalQuestion()) {
             cbQuestionOptions.addItem(NO_SELECTION); // Add No Selection option
         }
+        else
+        {
+            String display_text = String.format(
+                "%sClick on \"Insert Axiom\" to insert the following axiom: %s; "
+                + "or \"Previous Question\" to return to the previous question.",
+                "There are no further questions. ",
+                axiom
+            );
+            String.format("%s\n\n%s", display_text, question);
+            txtAreaQuestion.setText(question);
+        }
         cbQuestionOptions.setEnabled(true);
         // update axiom and unfreeze axiom import button
-        String axiom = String.format(
-                "%s \u2291 %s",
-                this.current_entity_name,
-                this.question_controller.getAxiom()
-        );
         txtAxiom.setText(axiom);
         btnInsertAxiom.setEnabled(!axiom.equals(""));
         // freeze/unfreeze next/prev buttons if at root/leaves
@@ -700,7 +731,8 @@ public class MainFrame extends javax.swing.JFrame {
     private void initDecisionProcess(){
         // reset the decision tree
         this.question_controller.begin();
-        if (!this.question_controller.isFirstQuestion()) { 
+        this.question_history.removeAllElements();
+        if (!this.question_controller.isFirstQuestion()) {
             throw new AssertionError("Restart should return to the first question."); 
         }
     }
@@ -871,10 +903,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel pnlHelp;
     private javax.swing.JScrollPane spAbout;
     private javax.swing.JScrollPane spHelp;
+    private javax.swing.JScrollPane spQHistory;
     private javax.swing.JScrollPane spQuestion;
     private javax.swing.JTabbedPane tabHelp;
     private javax.swing.JTextPane txpAboutBody;
     private javax.swing.JTextPane txpHelpBody;
+    private javax.swing.JTextArea txtAreaQHistory;
     private javax.swing.JTextArea txtAreaQuestion;
     private javax.swing.JTextField txtAxiom;
     private javax.swing.JTextField txtEntityName;
