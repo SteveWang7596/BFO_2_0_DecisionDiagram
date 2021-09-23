@@ -22,7 +22,7 @@
           <Dimension value="[538, 390]"/>
         </Property>
         <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[538, 390]"/>
+          <Dimension value="[700, 390]"/>
         </Property>
       </Properties>
 
@@ -68,8 +68,8 @@
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblAboutHeading" linkSize="11" alignment="0" min="-2" pref="437" max="-2" attributes="0"/>
-                              <Component id="spAbout" linkSize="11" alignment="0" min="-2" pref="437" max="-2" attributes="0"/>
+                              <Component id="lblAboutHeading" alignment="0" max="32767" attributes="0"/>
+                              <Component id="spAbout" alignment="0" min="-2" pref="437" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       </Group>
@@ -134,9 +134,6 @@
                           <Color blue="33" green="33" red="33" type="rgb"/>
                         </Property>
                       </Properties>
-                      <AccessibilityProperties>
-                        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="text/html"/>
-                      </AccessibilityProperties>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -163,7 +160,7 @@
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="spHelp" alignment="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="lblHelpHeading" alignment="0" pref="437" max="32767" attributes="0"/>
+                              <Component id="lblHelpHeading" alignment="0" pref="649" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       </Group>

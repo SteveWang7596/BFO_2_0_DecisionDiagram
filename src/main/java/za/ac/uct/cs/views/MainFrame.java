@@ -98,7 +98,7 @@ public class MainFrame extends javax.swing.JFrame {
         ExtraWindow.setMinimumSize(new java.awt.Dimension(422, 327));
         ExtraWindow.setName("Help — About"); // NOI18N
         ExtraWindow.setPreferredSize(new java.awt.Dimension(538, 390));
-        ExtraWindow.setSize(new java.awt.Dimension(538, 390));
+        ExtraWindow.setSize(new java.awt.Dimension(700, 390));
 
         tabHelp.setBackground(new java.awt.Color(255, 255, 255));
         tabHelp.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -123,7 +123,6 @@ public class MainFrame extends javax.swing.JFrame {
         txpAboutBody.setCaretColor(new java.awt.Color(51, 51, 51));
         txpAboutBody.setSelectionColor(new java.awt.Color(51, 51, 51));
         spAbout.setViewportView(txpAboutBody);
-        txpAboutBody.getAccessibleContext().setAccessibleDescription("text/html");
 
         javax.swing.GroupLayout pnlAboutLayout = new javax.swing.GroupLayout(pnlAbout);
         pnlAbout.setLayout(pnlAboutLayout);
@@ -132,13 +131,10 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(pnlAboutLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(pnlAboutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblAboutHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblAboutHeading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(spAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
         );
-
-        pnlAboutLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lblAboutHeading, spAbout});
-
         pnlAboutLayout.setVerticalGroup(
             pnlAboutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlAboutLayout.createSequentialGroup()
@@ -178,7 +174,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(pnlHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(spHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(lblHelpHeading, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
+                    .addComponent(lblHelpHeading, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
         pnlHelpLayout.setVerticalGroup(
