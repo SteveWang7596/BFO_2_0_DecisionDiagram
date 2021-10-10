@@ -5,13 +5,16 @@
  */
 package za.ac.uct.cs.views;
 
+import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
@@ -201,6 +204,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        setIconImage(getLogo());
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -854,6 +858,21 @@ public class MainFrame extends javax.swing.JFrame {
             "Could not save OWL file", 
             JOptionPane.ERROR_MESSAGE
         );
+    }
+    
+    private Image getLogo(){
+        String logo_path = "za/ac/uct/cs/images/Logo.png";
+        try{
+            InputStream logo = FileUtils.getFileFromResourcePackage(logo_path);
+            Image logo_image = ImageIO.read(logo);
+            return logo_image;
+        }
+        catch (IOException ex){
+            Logger.getLogger(MainFrame.class.getName()).severe(
+                String.format("Image at %s not found", logo_path)
+            );
+        }
+        return null;
     }
             
     /**
