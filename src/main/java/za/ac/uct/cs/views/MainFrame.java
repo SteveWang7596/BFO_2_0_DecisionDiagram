@@ -775,6 +775,7 @@ public class MainFrame extends javax.swing.JFrame {
                 );
                 
                 this.owl_handler = new OWLHandler(bfo_2_0_filestream, bfo_2_0_path);
+                bfo_2_0_filestream.close();
                 // update import file text field
                 txtOwlFilePath.setText(bfo_2_0_path);
             }

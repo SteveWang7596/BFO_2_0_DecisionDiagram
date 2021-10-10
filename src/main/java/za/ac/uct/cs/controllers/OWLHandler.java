@@ -3,6 +3,7 @@ package za.ac.uct.cs.controllers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
 import java.util.logging.Level;
@@ -123,8 +124,9 @@ public class OWLHandler{
 
         try {
             BFO_2_0 = manager.loadOntologyFromOntologyDocument(bfoFile);
+            bfoFile.close();
         }
-        catch(OWLOntologyCreationException ex) {
+        catch(OWLOntologyCreationException|IOException ex) {
             Logger.getLogger(OWLHandler.class.getName()).log(
                 Level.SEVERE,
                 null,
