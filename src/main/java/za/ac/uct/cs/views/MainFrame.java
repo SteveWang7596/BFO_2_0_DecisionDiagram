@@ -203,6 +203,7 @@ public class MainFrame extends javax.swing.JFrame {
         ExtraWindow.getContentPane().add(tabHelp, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("BFO 2.0 Classifier");
         setBackground(new java.awt.Color(255, 255, 255));
         setIconImage(getLogo());
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -861,7 +862,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
     
     private Image getLogo(){
-        String logo_path = "za/ac/uct/cs/images/Logo.png";
+        String logo_path = "za/ac/uct/cs/images/logo-small.png";
         try{
             InputStream logo = FileUtils.getFileFromResourcePackage(logo_path);
             Image logo_image = ImageIO.read(logo);
