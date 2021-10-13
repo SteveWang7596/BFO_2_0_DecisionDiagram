@@ -29,4 +29,4 @@ This project is built by:
 Supervised by: 
 *	Maria Keet 
 
-From the University of Cape Town, South Africa
+From the Department of Computer Science at the University of Cape Town, South Africa
